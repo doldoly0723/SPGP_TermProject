@@ -28,7 +28,10 @@ public class MainScene extends Scene {
         player = new Player();
         add(Layer.player,player);
 
-        add(Layer.platform, new Platform());
+        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 0, 7));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 10, 7));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 12, 7));
+
     }
     public boolean onTouch(MotionEvent event){
         return player.onTouch(event);
