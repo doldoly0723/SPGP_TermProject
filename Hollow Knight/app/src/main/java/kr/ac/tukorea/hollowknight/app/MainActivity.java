@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import kr.ac.tukorea.hollowknight.BuildConfig;
 import kr.ac.tukorea.hollowknight.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,14 +16,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(BuildConfig.DEBUG){
+            startActivity(new Intent(this, HollowKnightActivity.class));
+        }
     }
 
-//    public boolean OnTouchEvent(MotionEvent event){
-//        if(event.getAction() == MotionEvent.ACTION_DOWN){
-//            startActivity(new Intent(this, HollowKnightActivity.class));
-//        }
-//        return false;
-//    }
     public void onBtnStartGame(View view){
         startActivity(new Intent(this, HollowKnightActivity.class));
     }
