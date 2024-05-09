@@ -13,7 +13,10 @@
         android:theme="@style/Theme.HollowKnight"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".app.HollowKnightActivity"
+            android:exported="false" />
+        <activity
+            android:name=".app.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
