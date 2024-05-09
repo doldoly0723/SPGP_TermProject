@@ -7,11 +7,10 @@ import kr.ac.tukorea.framework.res.BitmapPool;
 
 public class AnimSprite extends Sprite {
     protected Rect srcRect = new Rect();
-    private float fps;
-    private int frameWidth, frameHeight;
-    private int frameCount;
-    private final long createdOn;
-    private int maxFrameCount = 16;
+    protected float fps;
+    protected int frameWidth, frameHeight;
+    protected int frameCount;
+    protected final long createdOn;
 
     public AnimSprite(int mipmapId, float fps, int count) {
         super(0);
@@ -31,21 +30,19 @@ public class AnimSprite extends Sprite {
             bitmap = BitmapPool.get(mipmapId);
         }
         this.fps = fps;
-        // 이동 0~8, 0
-        // 달리기 10~16, 0
         int imageWidth = bitmap.getWidth();
-        int imageHeight = bitmap.getHeight()/16;
+        int imageHeight = bitmap.getHeight();
         if (frameCount == 0) {
             this.frameWidth = imageHeight;
             this.frameHeight = imageHeight;
             this.frameCount = imageWidth / imageHeight;
         } else {
-            this.frameWidth = imageWidth / maxFrameCount;
+            this.frameWidth = imageWidth / frameCount;
             this.frameHeight = imageHeight;
             this.frameCount = frameCount;
         }
     }
-    
+
     @Override
     public void draw(Canvas canvas) {
         // AnimSprite 는 단순반복하는 이미지이므로 time 을 update 에서 꼼꼼히 누적하지 않아도 된다.
