@@ -22,5 +22,7 @@ public class MainScene extends Scene {
         Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정
         //Rect zoomArea = new Rect(0, 300, 100, 478);
         add(Layer.bg, new ScrollBackground(R.mipmap.sameple,zoomArea));
+
+        add(Layer.player,new Player());
     }
 }
