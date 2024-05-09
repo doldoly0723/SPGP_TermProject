@@ -13,8 +13,6 @@ import kr.ac.tukorea.hollowknight.R;
 
 
 public class Player extends SheetSprite {
-    private int runState = 8;
-    private int stayState = 1;
 
     private float startPosX = 9.0f;
     private float startPosY = 7.0f;
@@ -22,6 +20,11 @@ public class Player extends SheetSprite {
     public enum State{
         stay, running, jump, attack
     }
+
+    private final float ground;
+    private float jumpSpeed;
+    private static final float JUMP_POWER = 9.0f;
+    private static final float GRAVITY = 17.0f;
 
     protected State state = State.stay;
 
@@ -50,18 +53,33 @@ public class Player extends SheetSprite {
     public Player()  {
         super(R.mipmap.player_sheet,8);
         setPosition(startPosX,startPosY, 1.8f, 2.0f);
+        ground = y;
         srcRects = srcRectArray[state.ordinal()];
     }
 
-
+    @Override
+    public void update(float elapsedSeconds) {
+        if(state == State.jump){
+            float dy = jumpSpeed * elapsedSeconds;
+            jumpSpeed += GRAVITY * elapsedSeconds;
+            if (y + dy >= ground) {
+                dy = ground - y;
+                state = State.running;
+                srcRects = srcRectArray[state.ordinal()];
+            }
+            y += dy;
+            setPosition(x, y, width, height);
+        }
+    }
 
     public void running(){
-        int ord = state.ordinal() + 1;
-        if (ord == 4) {
-            ord = 0;
+        if(state == State.stay){
+            state = State.jump;
+            jumpSpeed = -JUMP_POWER;
+            srcRects = srcRectArray[state.ordinal()];
         }
-        state = State.values()[ord]; // int 로부터 enum 만들기
-        srcRects = srcRectArray[ord];
+        //state = State.values()[ord]; // int 로부터 enum 만들기
+        //srcRects = srcRectArray[ord];
     }
     public boolean onTouch(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_DOWN){

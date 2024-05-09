@@ -22,6 +22,9 @@ public class Platform extends MapObject {
         static int[] heights = {1,1,2};
     }
 
+    protected MainScene.Layer getLayer() {
+        return MainScene.Layer.platform;
+    }
 
 
 
