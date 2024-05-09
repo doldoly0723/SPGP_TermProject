@@ -5,6 +5,8 @@ import android.view.MotionEvent;
 
 import kr.ac.tukorea.framework.objects.HorzScrollBackground;
 import kr.ac.tukorea.framework.objects.ScrollBackground;
+import kr.ac.tukorea.framework.interfaces.IGameObject;
+import kr.ac.tukorea.framework.objects.Sprite;
 import kr.ac.tukorea.hollowknight.R;
 import kr.ac.tukorea.framework.objects.VertScrollBackground;
 import kr.ac.tukorea.framework.scene.Scene;
@@ -16,7 +18,7 @@ public class MainScene extends Scene {
 
 
     public enum Layer{
-        bg,platform, player,COUNT
+        bg,platform, player,ui, controller, COUNT
     }
     public MainScene(){
         initLayers(Layer.COUNT);
@@ -31,6 +33,11 @@ public class MainScene extends Scene {
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 0, 7));
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 8, 7));
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 7));
+
+        add(Layer.ui, new Sprite(R.mipmap.controller_left, 2.0f, 7.5f, 1.0f, 1.0f));
+        add(Layer.ui, new Sprite(R.mipmap.controller_right,5.0f, 7.5f, 1.0f, 1.0f));
+        add(Layer.ui, new Sprite(R.mipmap.controller_x,16.0f, 7.5f, 1.0f, 1.0f));
+
 
     }
     public boolean onTouch(MotionEvent event){
