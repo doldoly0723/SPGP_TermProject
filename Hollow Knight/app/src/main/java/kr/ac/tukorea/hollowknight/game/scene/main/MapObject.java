@@ -1,12 +1,14 @@
 package kr.ac.tukorea.hollowknight.game.scene.main;
 
+import android.graphics.RectF;
 import android.util.Log;
 
 import kr.ac.tukorea.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.framework.objects.Sprite;
 import kr.ac.tukorea.framework.scene.Scene;
+import kr.ac.tukorea.framework.interfaces.IBoxCollidable;
 
-public abstract class MapObject extends Sprite implements IRecyclable {
+public abstract class MapObject extends Sprite implements IBoxCollidable, IRecyclable {
     public MapObject() {
         super(0);
     }
@@ -33,6 +35,9 @@ public abstract class MapObject extends Sprite implements IRecyclable {
             return;
         }
         scene.remove(getLayer(), this);
+    }
+    public RectF getCollisionRect(){
+        return dstRect;
     }
     @Override
     public void onRecycle() {

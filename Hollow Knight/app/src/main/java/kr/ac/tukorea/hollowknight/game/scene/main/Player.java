@@ -2,9 +2,11 @@ package kr.ac.tukorea.hollowknight.game.scene.main;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 
 import kr.ac.tukorea.framework.objects.AnimSprite;
+import kr.ac.tukorea.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.framework.objects.SheetSprite;
 import kr.ac.tukorea.framework.objects.Sprite;
 import kr.ac.tukorea.framework.view.Metrics;
@@ -12,7 +14,7 @@ import kr.ac.tukorea.hollowknight.R;
 
 
 
-public class Player extends SheetSprite {
+public class Player extends SheetSprite implements IBoxCollidable {
 
     private float startPosX = 9.0f;
     private float startPosY = 7.0f;
@@ -57,6 +59,11 @@ public class Player extends SheetSprite {
         srcRects = srcRectArray[state.ordinal()];
     }
 
+    private void setState(State state){
+        this.state = state;
+        srcRects = srcRectArray[state.ordinal()];
+    }
+
     @Override
     public void update(float elapsedSeconds) {
         if(state == State.jump){
@@ -64,8 +71,7 @@ public class Player extends SheetSprite {
             jumpSpeed += GRAVITY * elapsedSeconds;
             if (y + dy >= ground) {
                 dy = ground - y;
-                state = State.running;
-                srcRects = srcRectArray[state.ordinal()];
+                setState(State.stay);
             }
             y += dy;
             setPosition(x, y, width, height);
@@ -74,9 +80,8 @@ public class Player extends SheetSprite {
 
     public void running(){
         if(state == State.stay){
-            state = State.jump;
             jumpSpeed = -JUMP_POWER;
-            srcRects = srcRectArray[state.ordinal()];
+            setState(State.jump);
         }
         //state = State.values()[ord]; // int 로부터 enum 만들기
         //srcRects = srcRectArray[ord];
@@ -87,4 +92,9 @@ public class Player extends SheetSprite {
         }
         return false;
     }
+
+    public RectF getCollisionRect(){
+        return dstRect;
+    }
+
 }
