@@ -11,13 +11,17 @@ public class AnimSprite extends Sprite {
     private int frameWidth, frameHeight;
     private int frameCount;
     private final long createdOn;
+    private int maxFrameCount = 16;
 
-    public AnimSprite(int mipmapId, float fps) {
+    public AnimSprite(int mipmapId, float fps, int count) {
         super(0);
         if (mipmapId != 0) {
-            setAnimationResource(mipmapId, fps, 0);
+            setAnimationResource(mipmapId, fps, count);
         }
         createdOn = System.currentTimeMillis();
+    }
+    public AnimSprite(int mipmapId, float fps){
+        this(mipmapId, fps, 0);
     }
     public void setAnimationResource(int mipmapId, float fps) {
         setAnimationResource(mipmapId, fps, 0);
@@ -27,19 +31,21 @@ public class AnimSprite extends Sprite {
             bitmap = BitmapPool.get(mipmapId);
         }
         this.fps = fps;
+        // 이동 0~8, 0
+        // 달리기 10~16, 0
         int imageWidth = bitmap.getWidth();
-        int imageHeight = bitmap.getHeight();
+        int imageHeight = bitmap.getHeight()/16;
         if (frameCount == 0) {
             this.frameWidth = imageHeight;
             this.frameHeight = imageHeight;
             this.frameCount = imageWidth / imageHeight;
         } else {
-            this.frameWidth = imageWidth / frameCount;
+            this.frameWidth = imageWidth / maxFrameCount;
             this.frameHeight = imageHeight;
             this.frameCount = frameCount;
         }
     }
-
+    
     @Override
     public void draw(Canvas canvas) {
         // AnimSprite 는 단순반복하는 이미지이므로 time 을 update 에서 꼼꼼히 누적하지 않아도 된다.
