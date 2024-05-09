@@ -16,7 +16,7 @@ public class MainScene extends Scene {
 
 
     public enum Layer{
-        bg,player,COUNT
+        bg,platform, player,COUNT
     }
     public MainScene(){
         initLayers(Layer.COUNT);
@@ -27,6 +27,8 @@ public class MainScene extends Scene {
         //add(Layer.player,new Player());
         player = new Player();
         add(Layer.player,player);
+
+        add(Layer.platform, new Platform());
     }
     public boolean onTouch(MotionEvent event){
         return player.onTouch(event);

@@ -6,7 +6,7 @@ import android.graphics.Rect;
 public class SheetSprite extends AnimSprite {
     protected Rect[] srcRects;
     public SheetSprite(int mipmapResId, float fps) {
-        super(mipmapResId, fps);
+        super(mipmapResId, fps, 1);
     }
 
     @Override

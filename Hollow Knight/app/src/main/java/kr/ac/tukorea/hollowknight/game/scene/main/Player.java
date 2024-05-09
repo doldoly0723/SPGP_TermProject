@@ -20,8 +20,11 @@ public class Player extends SheetSprite {
     private float startPosY = 7.0f;
 
     public enum State{
-        stay, running
+        stay, running, jump, attack
     }
+
+    protected State state = State.stay;
+
     protected static Rect[] makeRects(int... indices){
         Rect[] rects = new Rect[indices.length];
         for(int i = 0; i < indices.length; i++){
@@ -36,14 +39,16 @@ public class Player extends SheetSprite {
             //stay
             makeRects(0),
             // running
-            makeRects(0,1,2,3,4,5,6,7)
+            makeRects(0,1,2,3,4,5,6,7),
+            //jump
+            makeRects(900,901,902,903,904,905,906,907),
+            //attack
+            makeRects(400,401,402,403,404,405)
     };
 
 
-
-    protected State state = State.stay;
     public Player()  {
-        super(R.mipmap.player,8);
+        super(R.mipmap.player_sheet,8);
         setPosition(startPosX,startPosY, 1.8f, 2.0f);
         srcRects = srcRectArray[state.ordinal()];
     }
@@ -51,15 +56,12 @@ public class Player extends SheetSprite {
 
 
     public void running(){
-        if(state == State.stay){
-            //setPosition();
-            state = State.running;
+        int ord = state.ordinal() + 1;
+        if (ord == 4) {
+            ord = 0;
         }
-        else {
-            //setPosition();
-            state = State.stay;
-        }
-        srcRects = srcRectArray[state.ordinal()];
+        state = State.values()[ord]; // int 로부터 enum 만들기
+        srcRects = srcRectArray[ord];
     }
     public boolean onTouch(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_DOWN){
