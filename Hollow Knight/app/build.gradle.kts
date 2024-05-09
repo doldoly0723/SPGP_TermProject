@@ -6,6 +6,11 @@ android {
     namespace = "kr.ac.tukorea.hollowknight"
     compileSdk = 34
 
+    buildFeatures{
+        viewBinding = true
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "kr.ac.tukorea.hollowknight"
         minSdk = 24
