@@ -22,23 +22,25 @@ public class Player extends SheetSprite {
     public enum State{
         stay, running
     }
+    protected static Rect[] makeRects(int... indices){
+        Rect[] rects = new Rect[indices.length];
+        for(int i = 0; i < indices.length; i++){
+            int idx = indices[i];
+            int l = 0 + (idx % 100) * 128;
+            int t = 0 + (idx / 100) * 128;
+            rects[i] = new Rect(l,t,l+128, t+128);
+        }
+        return rects;
+    }
     protected static Rect[][]srcRectArray = {
             //stay
-            new Rect[]{
-                    new Rect(0+0*128, 0*128, 1*128, 0*128 + 1*128)
-            },
+            makeRects(0),
             // running
-            new Rect[]{
-                    new Rect(0+0*128, 0*128, 1*128, 0*128 + 1*128),
-                    new Rect(0+1*128, 0*128, 2*128, 0*128 + 1*128),
-                    new Rect(0+2*128, 0*128, 3*128, 0*128 + 1*128),
-                    new Rect(0+3*128, 0*128, 4*128, 0*128 + 1*128),
-                    new Rect(0+4*128, 0*128, 5*128, 0*128 + 1*128),
-                    new Rect(0+5*128, 0*128, 6*128, 0*128 + 1*128),
-                    new Rect(0+6*128, 0*128, 7*128, 0*128 + 1*128),
-                    new Rect(0+7*128, 0*128, 8*128, 0*128 + 1*128),
-            }
+            makeRects(0,1,2,3,4,5,6,7)
     };
+
+
+
     protected State state = State.stay;
     public Player()  {
         super(R.mipmap.player,8);
