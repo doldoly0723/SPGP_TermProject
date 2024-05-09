@@ -27,6 +27,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private float jumpSpeed;
     private static final float JUMP_POWER = 9.0f;
     private static final float GRAVITY = 17.0f;
+    private RectF collisionRect = new RectF();
 
     protected State state = State.stay;
 
@@ -50,13 +51,28 @@ public class Player extends SheetSprite implements IBoxCollidable {
             //attack
             makeRects(400,401,402,403,404,405)
     };
+    protected static float[][] edgeInsetRatios = {
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.jump
+            { 0.1f, 0.2f, 0.1f, 0.0f }, // State.jump
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attack
 
+    };
 
     public Player()  {
         super(R.mipmap.player_sheet,8);
         setPosition(startPosX,startPosY, 1.8f, 2.0f);
         ground = y;
         srcRects = srcRectArray[state.ordinal()];
+        fixCollision();
+    }
+    private void fixCollision(){
+        float[] insets = edgeInsetRatios[state.ordinal()];
+        collisionRect.set(
+                dstRect.left + width * insets[0],
+                dstRect.top + height * insets[1],
+                dstRect.right - width * insets[2],
+                dstRect.bottom - height * insets[3]);
     }
 
     private void setState(State state){
@@ -94,7 +110,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
 
     public RectF getCollisionRect(){
-        return dstRect;
+        return collisionRect;
     }
 
 }
