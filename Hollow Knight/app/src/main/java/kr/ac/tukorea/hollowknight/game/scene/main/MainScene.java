@@ -2,7 +2,9 @@ package kr.ac.tukorea.hollowknight.game.scene.main;
 
 import android.graphics.Rect;
 import android.view.MotionEvent;
+import android.util.Log;
 
+import kr.ac.tukorea.framework.objects.Button;
 import kr.ac.tukorea.framework.objects.HorzScrollBackground;
 import kr.ac.tukorea.framework.objects.ScrollBackground;
 import kr.ac.tukorea.framework.interfaces.IGameObject;
@@ -16,9 +18,9 @@ public class MainScene extends Scene {
     private final int Max_Height = 478;
     private final Player player;
 
-
+    private static final String TAG = MainScene.class.getSimpleName();
     public enum Layer{
-        bg,platform, player,ui, controller, COUNT
+        bg,platform, player,ui, touch, controller, COUNT
     }
     public MainScene(){
         initLayers(Layer.COUNT);
@@ -34,13 +36,44 @@ public class MainScene extends Scene {
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 8, 7));
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 7));
 
-        add(Layer.ui, new Sprite(R.mipmap.controller_left, 2.0f, 7.5f, 1.0f, 1.0f));
-        add(Layer.ui, new Sprite(R.mipmap.controller_right,5.0f, 7.5f, 1.0f, 1.0f));
-        add(Layer.ui, new Sprite(R.mipmap.controller_x,16.0f, 7.5f, 1.0f, 1.0f));
+        add(Layer.touch, new Button(R.mipmap.controller_left, 2.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
+            public boolean onTouch(){
+                Log.d(TAG, "Button: left");
+                player.leftMove();
+                return true;
+            }
+            public boolean offTouch(){
+                player.stay();
+                return true;
+            }
+        }));
+        add(Layer.touch, new Button(R.mipmap.controller_right, 5.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
+            public boolean onTouch(){
+                Log.d(TAG, "Button: right");
+                player.rightMove();
+                return true;
+            }
+            public boolean offTouch(){
+                player.stay();
+                return true;
+            }
+        }));
+
+        add(Layer.touch, new Button(R.mipmap.controller_x, 16.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
+            public boolean onTouch(){
+                Log.d(TAG, "Button: jump");
+                player.jump();
+                return true;
+            }
+            public boolean offTouch(){
+                player.stay();
+                return true;
+            }
+        }));
 
 
     }
-    public boolean onTouch(MotionEvent event){
-        return player.onTouch(event);
+    protected int getTouchLayerIndex() {
+        return Layer.touch.ordinal();
     }
 }

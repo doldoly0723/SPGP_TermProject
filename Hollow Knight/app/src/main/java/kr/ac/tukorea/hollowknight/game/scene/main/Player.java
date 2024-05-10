@@ -27,11 +27,14 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
 
     private float jumpSpeed;
+    private float moveSpeed = 5.0f;
     private static final float JUMP_POWER = 9.0f;
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
 
     protected State state = State.stay;
+
+    //private boolean reverse = false;
 
     protected static Rect[] makeRects(int... indices){
         Rect[] rects = new Rect[indices.length];
@@ -57,7 +60,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     };
     protected static float[][] edgeInsetRatios = {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.jump
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.running
             { 0.1f, 0.2f, 0.1f, 0.0f }, // State.jump
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attack
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
@@ -65,6 +68,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
     public Player()  {
         super(R.mipmap.player_sheet,8);
+        reverse = false;                // 처음에는 항상 오른쪽을 보고 시작
         setPosition(startPosX,startPosY, 1.8f, 2.0f);
         srcRects = srcRectArray[state.ordinal()];
         fixCollisionRect();
@@ -124,7 +128,6 @@ public class Player extends SheetSprite implements IBoxCollidable {
             dstRect.offset(0, dy);
             break;
         case stay:
-        case running:
             float foot = collisionRect.bottom;
             float floor = findNearestPlatformTop(foot);
             if (foot < floor) {
@@ -132,21 +135,55 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 jumpSpeed = 0;
             }
             break;
+        case running:
+            foot = collisionRect.bottom;
+            floor = findNearestPlatformTop(foot);
+            if (foot < floor) {
+                setState(State.falling);
+                jumpSpeed = 0;
+            }
+            float dx = moveSpeed * elapsedSeconds;
+            if(!reverse){
+                x += dx;
+                dstRect.offset(dx, 0);
+            }
+            else{
+                x -= dx;
+                dstRect.offset(-dx, 0);
+            }
+
+            break;
+
         }
         fixCollisionRect();
     }
 
-    public void running(){
-        if(state == State.stay){
+    public void jump(){
+        if(state == State.stay || state == State.running){
             jumpSpeed = -JUMP_POWER;
             setState(State.jump);
         }
         //state = State.values()[ord]; // int 로부터 enum 만들기
         //srcRects = srcRectArray[ord];
     }
+
+    public void rightMove(){
+        reverse = false;
+        setState(State.running);
+    }
+
+    public void leftMove(){
+        reverse = true;
+        setState(State.running);
+    }
+
+    public void stay(){
+        setState(State.stay);
+    }
+
     public boolean onTouch(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            running();
+            jump();
         }
         return false;
     }

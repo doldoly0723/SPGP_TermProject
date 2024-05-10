@@ -13,6 +13,7 @@ import kr.ac.tukorea.framework.activity.GameActivity;
 import kr.ac.tukorea.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.framework.interfaces.IGameObject;
 import kr.ac.tukorea.framework.interfaces.IRecyclable;
+import kr.ac.tukorea.framework.interfaces.ITouchable;
 import kr.ac.tukorea.framework.view.Metrics;
 
 public class Scene {
@@ -148,8 +149,20 @@ public class Scene {
             }
         }
     }
-
+    protected int getTouchLayerIndex() {
+        return -1;
+    }
     public boolean onTouch(MotionEvent event) {
+        int touchLayer = getTouchLayerIndex();
+        if (touchLayer < 0) return false;
+        ArrayList<IGameObject> gameObjects = layers.get(touchLayer);
+        for (IGameObject gobj : gameObjects) {
+            if (!(gobj instanceof ITouchable)) {
+                continue;
+            }
+            boolean processed = ((ITouchable) gobj).onTouchEvent(event);
+            if (processed) return true;
+        }
         return false;
     }
 

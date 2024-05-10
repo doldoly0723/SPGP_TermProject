@@ -5,6 +5,7 @@ import android.graphics.Rect;
 
 public class SheetSprite extends AnimSprite {
     protected Rect[] srcRects;
+    protected boolean reverse;
     public SheetSprite(int mipmapResId, float fps) {
         super(mipmapResId, fps, 1);
     }
