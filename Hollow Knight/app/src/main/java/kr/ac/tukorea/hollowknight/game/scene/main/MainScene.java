@@ -1,6 +1,7 @@
 package kr.ac.tukorea.hollowknight.game.scene.main;
 
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.util.Log;
 
@@ -18,6 +19,8 @@ public class MainScene extends Scene {
     private final int Max_Height = 478;
     private final Player player;
 
+    private final ScrollBackground background;
+
     private static final String TAG = MainScene.class.getSimpleName();
     public enum Layer{
         bg,platform, player,ui, touch, controller, COUNT
@@ -26,7 +29,9 @@ public class MainScene extends Scene {
         initLayers(Layer.COUNT);
         Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정
         //Rect zoomArea = new Rect(0, 300, 100, 478);
-        add(Layer.bg, new ScrollBackground(R.mipmap.sameple,zoomArea));
+        background = new ScrollBackground(R.mipmap.sameple,zoomArea);
+        add(Layer.bg,background);
+        //add(Layer.bg, new ScrollBackground(R.mipmap.sameple,zoomArea));
 
         //add(Layer.player,new Player());
         player = new Player();
@@ -73,6 +78,14 @@ public class MainScene extends Scene {
 
 
     }
+
+    public void update(float frameTime) {
+        // 플레이어의 위치를 지속적으로 확인하여 특정 경계 부분에 접근할 경우 화면이 스크롤 되도록 구현
+
+    }
+
+
+
     protected int getTouchLayerIndex() {
         return Layer.touch.ordinal();
     }

@@ -27,7 +27,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
 
     private float jumpSpeed;
-    private float moveSpeed = 5.0f;
+    private float moveSpeed = 1.0f;
     private static final float JUMP_POWER = 9.0f;
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
@@ -181,12 +181,15 @@ public class Player extends SheetSprite implements IBoxCollidable {
         setState(State.stay);
     }
 
-    public boolean onTouch(MotionEvent event){
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
-            jump();
-        }
-        return false;
+    public float getPosX(){
+        return x;
     }
+
+    public float getPosY(){
+        return y;
+    }
+
+
 
     public RectF getCollisionRect(){
         return collisionRect;

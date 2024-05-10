@@ -7,7 +7,7 @@ import kr.ac.tukorea.framework.view.Metrics;
 
 public class ScrollBackground extends Sprite{
     private Rect srcRect; // 확대할 영역을 정의하는 소스 직사각형
-
+    private final float speed;
     public ScrollBackground(int bitmapResId, Rect zoomArea) {
         super(bitmapResId);
         this.srcRect = zoomArea; // 확대할 영역 설정
@@ -15,10 +15,14 @@ public class ScrollBackground extends Sprite{
         // 확대된 이미지가 화면에 맞게 조정됩니다.
         this.width = srcRect.width() * Metrics.height / srcRect.height();
         setPosition(Metrics.width / 2, Metrics.height / 2, width, Metrics.height);
+        speed = 3.0f;
     }
     public void update(float elapsedSeconds) {
         // 정적 배경이므로 위치 업데이트 로직이 필요 없습니다.
+        
+        // 화면 스크롤 테스트 해보기
     }
+
 
     @Override
     public void draw(Canvas canvas) {
