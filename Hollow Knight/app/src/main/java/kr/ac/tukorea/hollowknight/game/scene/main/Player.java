@@ -27,7 +27,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
 
     private float jumpSpeed;
-    private float moveSpeed = 1.0f;
+    private float moveSpeed = 2.0f;
     private static final float JUMP_POWER = 9.0f;
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
@@ -55,7 +55,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
             makeRects(900,901,902,903,904,905,906,907),
             //attack
             makeRects(400,401,402,403,404,405),
-            //
+            // fall
             makeRects(905,906,907)
     };
     protected static float[][] edgeInsetRatios = {

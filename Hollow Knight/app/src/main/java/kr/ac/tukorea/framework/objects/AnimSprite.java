@@ -45,6 +45,7 @@ public class AnimSprite extends Sprite {
 
     @Override
     public void draw(Canvas canvas) {
+
         // AnimSprite 는 단순반복하는 이미지이므로 time 을 update 에서 꼼꼼히 누적하지 않아도 된다.
         // draw 에서 생성시각과의 차이로 frameIndex 를 계산한다.
         long now = System.currentTimeMillis();
