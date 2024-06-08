@@ -7,9 +7,13 @@ import kr.ac.tukorea.framework.interfaces.ITouchable;
 import kr.ac.tukorea.framework.view.Metrics;
 
 public class Button extends Sprite implements ITouchable {
+    private boolean processedDown;
+
+    public enum Action{
+        pressed, released,
+    }
     public interface Callback {
-        public boolean onTouch();
-        public boolean offTouch();
+        public boolean onTouch(Action action);
     }
     private static final String TAG = Button.class.getSimpleName();
     private final Callback callback;
@@ -24,11 +28,11 @@ public class Button extends Sprite implements ITouchable {
             return false;
         }
         //Log.d(TAG, "Button.onTouch(" + System.identityHashCode(this) + ", " + e.getAction() + ", " + e.getX() + ", " + e.getY());
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                return callback.offTouch();  // 사용자가 버튼을 눌렀을 때
-            case MotionEvent.ACTION_UP:
-                return callback.onTouch();    // 사용자가 버튼에서 손을 뗐을 때
+        int action = e.getAction();
+        if (action == MotionEvent.ACTION_DOWN) {
+            processedDown = callback.onTouch(Action.pressed);
+        } else if (action == MotionEvent.ACTION_UP && processedDown) {
+            callback.onTouch(Action.released);
         }
         return true;
     }

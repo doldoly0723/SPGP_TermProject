@@ -42,49 +42,33 @@ public class MainScene extends Scene {
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 7));
 
         add(Layer.touch, new Button(R.mipmap.controller_left, 2.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
-            public boolean onTouch(){
+            public boolean onTouch(Button.Action action){
                 Log.d(TAG, "Button: left");
-                player.leftMove();
-                return true;
-            }
-            public boolean offTouch(){
-                player.stay();
+                player.leftMove(action == Button.Action.pressed);
                 return true;
             }
         }));
         add(Layer.touch, new Button(R.mipmap.controller_right, 5.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
-            public boolean onTouch(){
+            public boolean onTouch(Button.Action action){
                 Log.d(TAG, "Button: right");
-                player.rightMove();
-                return true;
-            }
-            public boolean offTouch(){
-                player.stay();
+                player.rightMove(action == Button.Action.pressed);
                 return true;
             }
         }));
 
         add(Layer.touch, new Button(R.mipmap.controller_x, 16.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
-            public boolean onTouch(){
+            public boolean onTouch(Button.Action action){
                 Log.d(TAG, "Button: jump");
                 player.jump();
                 return true;
             }
-            public boolean offTouch(){
-                player.stay();
-                return true;
-            }
         }));
-
-
     }
 
     public void update(float frameTime) {
-        // 플레이어의 위치를 지속적으로 확인하여 특정 경계 부분에 접근할 경우 화면이 스크롤 되도록 구현
-
+        super.update(frameTime);
+        // 플레이어가 특정 경계에 도달하면 같이 화면이 스크롤 되도록 구현
     }
-
-
 
     protected int getTouchLayerIndex() {
         return Layer.touch.ordinal();

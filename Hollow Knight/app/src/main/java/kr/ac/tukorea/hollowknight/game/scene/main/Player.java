@@ -167,14 +167,24 @@ public class Player extends SheetSprite implements IBoxCollidable {
         //srcRects = srcRectArray[ord];
     }
 
-    public void rightMove(){
-        reverse = false;
-        setState(State.running);
+    public void rightMove(boolean startright){
+        if(state == State.stay && startright) {
+            reverse = false;
+            setState(State.running);
+        }
+        if(state == State.running && !startright){
+            setState(State.stay);
+        }
     }
 
-    public void leftMove(){
-        reverse = true;
-        setState(State.running);
+    public void leftMove(boolean startLeft){
+        if(state == State.stay && startLeft) {
+            reverse = true;
+            setState(State.running);
+        }
+        if(state == State.running && !startLeft){
+            setState(State.stay);
+        }
     }
 
     public void stay(){
