@@ -154,6 +154,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 }
                 else {
                     maxRight = false;
+                    maxLeft = false;
                 }
                 x += dx;
                 dstRect.offset(dx, 0);
@@ -166,6 +167,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
                     maxRight = false;
                 }
                 else {
+                    maxRight = false;
                     maxLeft = false;
                 }
                 x -= dx;
