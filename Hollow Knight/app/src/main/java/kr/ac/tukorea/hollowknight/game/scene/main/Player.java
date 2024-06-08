@@ -144,10 +144,18 @@ public class Player extends SheetSprite implements IBoxCollidable {
             }
             float dx = moveSpeed * elapsedSeconds;
             if(!reverse){
+                // 오른쪽으로 이동하는 경우: 플레이어가 화면의 오른쪽 끝을 넘지 않도록 조정
+                if (x + dx + dstRect.width() > Metrics.width - 1) {
+                    dx = 0;  // 화면 끝까지만 이동
+                }
                 x += dx;
                 dstRect.offset(dx, 0);
             }
             else{
+                // 왼쪽으로 이동하는 경우: 플레이어가 화면의 왼쪽 끝을 넘지 않도록 조정
+                if (x - dx < 0 + 2) {
+                    dx = 0;  // 화면 끝까지만 이동 (0까지 이동)
+                }
                 x -= dx;
                 dstRect.offset(-dx, 0);
             }
