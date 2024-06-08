@@ -7,8 +7,7 @@ public class SheetSprite extends AnimSprite {
     protected Rect[] srcRects;
     protected boolean reverse;
 
-    protected boolean maxRight;
-    protected boolean maxLeft;
+
     public SheetSprite(int mipmapResId, float fps) {
         super(mipmapResId, fps, 1);
     }

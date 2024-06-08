@@ -27,15 +27,18 @@ public class MainScene extends Scene {
     }
     public MainScene(){
         initLayers(Layer.COUNT);
-        Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정
-        //Rect zoomArea = new Rect(0, 300, 100, 478);
-        background = new ScrollBackground(R.mipmap.sameple,zoomArea);
-        add(Layer.bg,background);
-        //add(Layer.bg, new ScrollBackground(R.mipmap.sameple,zoomArea));
 
         //add(Layer.player,new Player());
         player = new Player();
         add(Layer.player,player);
+
+        Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정
+        //Rect zoomArea = new Rect(0, 300, 100, 478);
+        background = new ScrollBackground(R.mipmap.sameple,zoomArea, player);
+        add(Layer.bg,background);
+        //add(Layer.bg, new ScrollBackground(R.mipmap.sameple,zoomArea));
+
+
 
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 0, 7));
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 8, 7));

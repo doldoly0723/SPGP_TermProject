@@ -21,13 +21,15 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
     private float startPosX = 9.0f;
     private float startPosY = 3.0f;
+    private boolean maxRight;
+    private boolean maxLeft;
 
     public enum State{
         stay, running, jump, attack, falling
     }
 
     private float jumpSpeed;
-    private float moveSpeed = 2.0f;
+    private float moveSpeed = 4.0f;
     private static final float JUMP_POWER = 9.0f;
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
@@ -147,6 +149,11 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 // 오른쪽으로 이동하는 경우: 플레이어가 화면의 오른쪽 끝을 넘지 않도록 조정
                 if (x + dx + dstRect.width() > Metrics.width - 1) {
                     dx = 0;  // 화면 끝까지만 이동
+                    maxRight = true;        // 오른쪽 끝에 도달했을때 화면 이동
+                    maxLeft = false;
+                }
+                else {
+                    maxRight = false;
                 }
                 x += dx;
                 dstRect.offset(dx, 0);
@@ -155,9 +162,15 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 // 왼쪽으로 이동하는 경우: 플레이어가 화면의 왼쪽 끝을 넘지 않도록 조정
                 if (x - dx < 0 + 2) {
                     dx = 0;  // 화면 끝까지만 이동 (0까지 이동)
+                    maxLeft = true;
+                    maxRight = false;
+                }
+                else {
+                    maxLeft = false;
                 }
                 x -= dx;
                 dstRect.offset(-dx, 0);
+
             }
 
             break;
@@ -207,6 +220,12 @@ public class Player extends SheetSprite implements IBoxCollidable {
         return y;
     }
 
+    public boolean isMaxRight() {
+        return this.maxRight;
+    }
+    public boolean isMaxLeft() {
+        return this.maxLeft;
+    }
 
 
     public RectF getCollisionRect(){
