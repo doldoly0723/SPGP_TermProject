@@ -207,6 +207,15 @@ public class Player extends SheetSprite implements IBoxCollidable {
         if(state == State.stay || state == State.running){
             setState(State.attack);
             attackframeCount = srcRectArray[State.attack.ordinal()].length;
+
+            if(reverse){
+                edgeInsetRatios[3][2] =  0.0f; // State.attack right
+                edgeInsetRatios[3][0] =  -1.0f; // State.attack left
+            }
+            else{
+                edgeInsetRatios[3][0] =  0.0f; // State.attack left
+                edgeInsetRatios[3][2] =  -1.0f; // State.attack right
+            }
         }
     }
     public void rightMove(boolean startright){
@@ -272,6 +281,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
                         dstRect.bottom
                 );
 
+
                 canvas.save();
                 // 좌우 반전
                 canvas.scale(-1, 1, effectDstRect.centerX(), effectDstRect.centerY());
@@ -283,6 +293,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
                         dstRect.right + dstRect.width(), // 이펙트의 폭을 플레이어의 폭과 동일하게 설정
                         dstRect.bottom
                 );
+
             }
 
             // 이펙트 그리기
