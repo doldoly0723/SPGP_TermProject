@@ -12,6 +12,7 @@ public class AnimSprite extends Sprite {
     protected int frameCount;
     protected final long createdOn;
 
+
     public AnimSprite(int mipmapId, float fps, int count) {
         super(0);
         if (mipmapId != 0) {

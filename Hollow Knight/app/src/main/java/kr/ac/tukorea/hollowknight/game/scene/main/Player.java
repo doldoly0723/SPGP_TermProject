@@ -24,9 +24,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private boolean maxRight;
     private boolean maxLeft;
     private int attackframeCount;
+    private Canvas canvas;
 
     public enum State{
-        stay, running, jump, attack, falling
+        stay, running, jump, attack, falling, attackEffect
     }
 
     private float jumpSpeed;
@@ -59,7 +60,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
             //attack
             makeRects(400,401,402,403,404,405),
             // fall
-            makeRects(905,906,907)
+            makeRects(905,906,907),
+            // attack effect
+            makeRects(1213, 1214, 1215)
     };
     protected static float[][] edgeInsetRatios = {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
@@ -67,6 +70,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
             { 0.1f, 0.2f, 0.1f, 0.0f }, // State.jump
             { -0.5f, 0.0f, -0.5f, 0.0f }, // State.attack
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
+            {0.0f, 0.0f, 0.0f, 0.0f},   // attack effect
     };
 
     public Player()  {
@@ -179,9 +183,14 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
         case attack:
             attackframeCount--;
-            if(attackframeCount == 0)
+            if(attackframeCount == 0){
                 setState(State.stay);
+            }
+
+            // 공격 이펙트를 플레이어의 우측에 그리기 srcRectArray[State.attackEffect.ordinal()]
+
             break;
+
         }
         fixCollisionRect();
     }
@@ -244,6 +253,44 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
     public RectF getCollisionRect(){
         return collisionRect;
+    }
+
+    public void draw(Canvas canvas) {
+        super.draw(canvas);  // 기본 플레이어 그리기
+
+        if (state == State.attack && srcRectArray[State.attackEffect.ordinal()] != null) {
+            int effectIndex = Math.round((float) srcRectArray[State.attackEffect.ordinal()].length * (1.0f - ((float)attackframeCount / srcRectArray[State.attack.ordinal()].length)));
+            Rect effectSrcRect = srcRectArray[State.attackEffect.ordinal()][effectIndex % srcRectArray[State.attackEffect.ordinal()].length];
+            RectF effectDstRect;
+
+            if (reverse) {
+                // reverse가 true인 경우, 이펙트를 플레이어의 왼쪽
+                effectDstRect = new RectF(
+                        dstRect.left - dstRect.width(), // 이펙트의 시작 위치를 플레이어의 왼쪽 끝으로 설정
+                        dstRect.top,
+                        dstRect.left, // 이펙트의 폭을 플레이어의 폭과 동일하게 설정
+                        dstRect.bottom
+                );
+
+                canvas.save();
+                // 좌우 반전
+                canvas.scale(-1, 1, effectDstRect.centerX(), effectDstRect.centerY());
+            } else {
+                // reverse가 false인 경우, 이펙트를 플레이어의 오른쪽
+                effectDstRect = new RectF(
+                        dstRect.right, // 이펙트의 시작 위치를 플레이어의 오른쪽 끝으로 설정
+                        dstRect.top,
+                        dstRect.right + dstRect.width(), // 이펙트의 폭을 플레이어의 폭과 동일하게 설정
+                        dstRect.bottom
+                );
+            }
+
+            // 이펙트 그리기
+            canvas.drawBitmap(bitmap, effectSrcRect, effectDstRect, null);
+            if (reverse) {
+                canvas.restore();  // 캔버스 상태 복원
+            }
+        }
     }
 
 }
