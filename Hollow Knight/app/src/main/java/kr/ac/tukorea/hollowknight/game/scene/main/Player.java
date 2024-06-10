@@ -68,7 +68,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.running
             { 0.1f, 0.2f, 0.1f, 0.0f }, // State.jump
-            { -0.5f, 0.0f, -0.5f, 0.0f }, // State.attack
+            { -1.0f, 0.0f, -1.0f, 0.0f }, // State.attack
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
             {0.0f, 0.0f, 0.0f, 0.0f},   // attack effect
     };
