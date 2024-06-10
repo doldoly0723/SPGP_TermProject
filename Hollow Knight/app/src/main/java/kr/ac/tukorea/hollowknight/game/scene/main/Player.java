@@ -23,6 +23,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private float startPosY = 3.0f;
     private boolean maxRight;
     private boolean maxLeft;
+    private int attackframeCount;
 
     public enum State{
         stay, running, jump, attack, falling
@@ -64,7 +65,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.running
             { 0.1f, 0.2f, 0.1f, 0.0f }, // State.jump
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attack
+            { -0.5f, 0.0f, -0.5f, 0.0f }, // State.attack
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
     };
 
@@ -174,9 +175,13 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 dstRect.offset(-dx, 0);
 
             }
-
             break;
 
+        case attack:
+            attackframeCount--;
+            if(attackframeCount == 0)
+                setState(State.stay);
+            break;
         }
         fixCollisionRect();
     }
@@ -189,7 +194,12 @@ public class Player extends SheetSprite implements IBoxCollidable {
         //state = State.values()[ord]; // int 로부터 enum 만들기
         //srcRects = srcRectArray[ord];
     }
-
+    public void attack(){
+        if(state == State.stay || state == State.running){
+            setState(State.attack);
+            attackframeCount = srcRectArray[State.attack.ordinal()].length;
+        }
+    }
     public void rightMove(boolean startright){
         if(state == State.stay && startright) {
             reverse = false;
@@ -209,6 +219,8 @@ public class Player extends SheetSprite implements IBoxCollidable {
             setState(State.stay);
         }
     }
+
+
 
     public void stay(){
         setState(State.stay);

@@ -66,6 +66,13 @@ public class MainScene extends Scene {
                 return true;
             }
         }));
+
+        add(Layer.touch, new Button(R.mipmap.controller_a, 18.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
+            public boolean onTouch(Button.Action action){
+                player.attack();
+                return true;
+            }
+        }));
     }
 
     public void update(float frameTime) {
