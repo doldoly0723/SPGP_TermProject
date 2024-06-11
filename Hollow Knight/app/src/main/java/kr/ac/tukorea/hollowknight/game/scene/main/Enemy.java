@@ -1,7 +1,5 @@
 package kr.ac.tukorea.hollowknight.game.scene.main;
 
-import static kr.ac.tukorea.hollowknight.game.scene.main.Player.srcRectArray;
-
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -15,7 +13,9 @@ import kr.ac.tukorea.framework.scene.Scene;
 import kr.ac.tukorea.framework.view.Metrics;
 import kr.ac.tukorea.hollowknight.R;
 
-public class Enemy1 extends SheetSprite implements IBoxCollidable {
+
+public class Enemy extends SheetSprite implements IBoxCollidable {
+
     private float startPosX = 16.0f;
     private float startPosY = 3.0f;
     private boolean maxRight;
@@ -24,7 +24,7 @@ public class Enemy1 extends SheetSprite implements IBoxCollidable {
     private Canvas canvas;
 
     public enum State{
-        move, rockOn, attack, hurt, death
+        stay, move, turn, hurt, dead,
     }
 
     private float jumpSpeed;
@@ -33,49 +33,77 @@ public class Enemy1 extends SheetSprite implements IBoxCollidable {
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
 
-    protected Player.State state = Player.State.stay;
+    protected State state = State.dead;
 
     //private boolean reverse = false;
 
-    protected static Rect[] makeRects(int... indices){
+    protected static Rect[] makemoveRects(int... indices){
         Rect[] rects = new Rect[indices.length];
         for(int i = 0; i < indices.length; i++){
             int idx = indices[i];
-            int l = 0 + (idx % 100) * 128;
-            int t = 0 + (idx / 100) * 128;
-            rects[i] = new Rect(l,t,l+128, t+128);
+            int l = 3 + (idx % 100) * 119;
+            int t = 22 + (idx / 100) * 85;
+            rects[i] = new Rect(l,t,l+116, t+85);
+        }
+        return rects;
+    }
+    protected static Rect[] maketurnRects(int... indices){
+        Rect[] rects = new Rect[indices.length];
+        for(int i = 0; i < indices.length; i++){
+            int idx = indices[i];
+            int l = 3 + (idx % 100) * 99;
+            int t = 129;
+            rects[i] = new Rect(l,t,l+96, t+83);
+        }
+        return rects;
+    }
+    protected static Rect[] makehurtRects(int... indices){
+        Rect[] rects = new Rect[indices.length];
+        for(int i = 0; i < indices.length; i++){
+            int idx = indices[i];
+            int l = 3 + (idx % 100) * 120;
+            int t = 234;
+            rects[i] = new Rect(l,t,l+117, t+121);
+        }
+        return rects;
+    }
+    protected static Rect[] makedeadRects(int... indices){
+        Rect[] rects = new Rect[indices.length];
+        for(int i = 0; i < indices.length; i++){
+            int idx = indices[i];
+            int l = 3 + (idx % 100) * 131;
+            int t = 376;
+            rects[i] = new Rect(l,t,l+128, t+90);
         }
         return rects;
     }
     protected static Rect[][]srcRectArray = {
-            //stay
-            makeRects(0),
-            // running
-            makeRects(0,1,2,3,4,5,6,7),
-            //jump
-            makeRects(900,901,902,903,904,905,906,907),
-            //attack
-            makeRects(400,401,402,403,404,405),
-            // fall
-            makeRects(905,906,907),
-            // attack effect
-            makeRects(1213, 1214, 1215)
+            //stay  3 22 116 85
+            makemoveRects(0), //3  122  241  360
+            // move
+            makemoveRects(0,1,2),
+            //turn
+            maketurnRects(100, 101),    // 3 129 96 83  102
+            //hurt
+            makehurtRects(200, 201),        // 3 234 117 121    123
+            // death
+            makedeadRects(300, 301),    //3 376 128 90  134
     };
     protected static float[][] edgeInsetRatios = {
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.move
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.rockOn
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attack
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.heart
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.death
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.turn
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.hurt
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.dead
     };
-    public Enemy1()  {
-        super(R.mipmap.Crawlid,4);
+
+    public Enemy()  {
+        super(R.mipmap.crawlid,8);
         reverse = false;                // 처음에는 항상 오른쪽을 보고 시작
         setPosition(startPosX,startPosY, 1.8f, 2.0f);
         srcRects = srcRectArray[state.ordinal()];
         fixCollisionRect();
     }
-
     private float findNearestPlatformTop(float foot) {
         MainScene scene = (MainScene) Scene.top();
         if (scene == null) return Metrics.height;
@@ -107,12 +135,43 @@ public class Enemy1 extends SheetSprite implements IBoxCollidable {
                 dstRect.bottom - height * insets[3]);
     }
 
-    private void setState(Player.State state){
+    private void setState(State state){
         this.state = state;
         srcRects = srcRectArray[state.ordinal()];
     }
 
-    public RectF getCollisionRect() {
+    @Override
+    public void update(float elapsedSeconds) {
+
+        fixCollisionRect();
+    }
+
+
+
+
+    public void stay(){
+        setState(State.stay);
+    }
+
+    public float getPosX(){
+        return x;
+    }
+
+    public float getPosY(){
+        return y;
+    }
+
+    public boolean isMaxRight() {
+        return this.maxRight;
+    }
+    public boolean isMaxLeft() {
+        return this.maxLeft;
+    }
+
+
+    public RectF getCollisionRect(){
         return collisionRect;
     }
+
+
 }
