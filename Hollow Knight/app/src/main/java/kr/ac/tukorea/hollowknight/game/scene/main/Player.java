@@ -116,6 +116,22 @@ public class Player extends SheetSprite implements IBoxCollidable {
         srcRects = srcRectArray[state.ordinal()];
     }
 
+    private void scrollPlayform(){
+        MainScene scene = (MainScene) Scene.top();
+        ArrayList<IGameObject> platforms = scene.objectsAt(MainScene.Layer.platform);
+        for(IGameObject obj : platforms){
+            Platform platform = (Platform) obj;
+            if(maxLeft){
+                platform.scrollLeft();
+            }
+            else if(maxRight){
+                platform.scrollRight();
+            }
+        }
+
+    }
+
+
     @Override
     public void update(float elapsedSeconds) {
         switch (state){
@@ -177,8 +193,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 }
                 x -= dx;
                 dstRect.offset(-dx, 0);
-
             }
+
+            scrollPlayform();
             break;
 
         case attack:

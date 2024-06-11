@@ -13,10 +13,12 @@ public abstract class MapObject extends Sprite implements IBoxCollidable, IRecyc
         super(0);
     }
     private static final String TAG = MapObject.class.getSimpleName();
-
+    private float moveSpeed = 4.0f;
+    private float elapsedTime;
     @Override
     public void update(float elapsedSeconds) {
         // 플레이어 이동에 따른 맵 오브젝트 위치 변화
+        elapsedTime = elapsedSeconds;
     }
 
     abstract protected MainScene.Layer getLayer();
@@ -42,5 +44,12 @@ public abstract class MapObject extends Sprite implements IBoxCollidable, IRecyc
     @Override
     public void onRecycle() {
 
+    }
+
+    public void scrollLeft(){
+        dstRect.offset(elapsedTime * moveSpeed, 0.0f);
+    }
+    public void scrollRight(){
+        dstRect.offset(-elapsedTime * moveSpeed, 0.0f);
     }
 }

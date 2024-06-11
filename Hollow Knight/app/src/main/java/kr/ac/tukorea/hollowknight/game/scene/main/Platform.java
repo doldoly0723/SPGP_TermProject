@@ -45,4 +45,6 @@ public class Platform extends MapObject {
         height = type.height();
         dstRect.set(left,top,left+width,top+height);
     }
+
+
 }
