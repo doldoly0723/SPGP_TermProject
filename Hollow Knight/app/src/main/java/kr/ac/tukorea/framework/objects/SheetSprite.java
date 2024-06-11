@@ -6,7 +6,7 @@ import android.graphics.Rect;
 public class SheetSprite extends AnimSprite {
     protected Rect[] srcRects;
     protected boolean reverse;
-  
+
     public void scrollLeft(){
         dstRect.offset(0.2f, 0.0f);
     }
