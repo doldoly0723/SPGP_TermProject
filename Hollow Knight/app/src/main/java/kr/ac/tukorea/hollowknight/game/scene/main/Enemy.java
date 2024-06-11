@@ -16,15 +16,17 @@ import kr.ac.tukorea.hollowknight.R;
 
 public class Enemy extends SheetSprite implements IBoxCollidable {
 
+    private static final float MOVE_LIMIT = 5.0f;
     private float startPosX = 16.0f;
     private float startPosY = 3.0f;
     private boolean maxRight;
     private boolean maxLeft;
     private int attackframeCount;
     private Canvas canvas;
+    private float moveDistance = 0.0f;
 
     public enum State{
-        stay, move, turn, hurt, dead,
+        stay, move, turn, hurt, dead, falling,
     }
 
     private float jumpSpeed;
@@ -33,7 +35,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
 
-    protected State state = State.dead;
+    protected State state = State.move;
 
     //private boolean reverse = false;
 
@@ -88,6 +90,8 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
             makehurtRects(200, 201),        // 3 234 117 121    123
             // death
             makedeadRects(300, 301),    //3 376 128 90  134
+            // falling
+            makehurtRects(200, 201),
     };
     protected static float[][] edgeInsetRatios = {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
@@ -95,6 +99,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.turn
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.hurt
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.dead
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
     };
 
     public Enemy()  {
@@ -142,7 +147,61 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
 
     @Override
     public void update(float elapsedSeconds) {
+        switch (state){
+            case stay:
+                float foot = collisionRect.bottom;
+                float floor = findNearestPlatformTop(foot);
+                float dx = moveSpeed * elapsedSeconds;
+                if (foot < floor) {
+                    setState(Enemy.State.falling);
+                    jumpSpeed = 0;
+                } else {
+                    // 이동 로직
+                    if (!reverse) {
+                        x -= dx; // 왼쪽으로 1 픽셀 이동
+                        dstRect.offset(-dx, 0);
+                    } else {
+                        x += dx; // 오른쪽으로 1 픽셀 이동
+                        dstRect.offset(dx, 0);
+                    }
+                    moveDistance += dx; // 이동 거리 카운터 증가
 
+                    // 이동 한계 도달 시 방향 전환
+                    if (moveDistance >= MOVE_LIMIT) {
+                        reverse = !reverse;  // 방향 전환
+                        moveDistance = 0;  // 이동 거리 카운터 리셋
+                    }
+                }
+                break;
+            case move:
+                foot = collisionRect.bottom;
+                floor = findNearestPlatformTop(foot);
+                if (foot < floor) {
+                    setState(Enemy.State.falling);
+                    jumpSpeed = 0;
+                }
+                break;
+            case turn:
+                break;
+            case hurt:
+                break;
+            case dead:
+                break;
+            case falling:
+                float dy = jumpSpeed * elapsedSeconds;
+                jumpSpeed += GRAVITY * elapsedSeconds;
+                if(jumpSpeed >= 0){ // 낙하하고 있다면 발밑에 땅이 있는지 확인
+                    foot = collisionRect.bottom;
+                    floor = findNearestPlatformTop(foot);
+                    if(foot + dy >= floor){
+                        dy = floor - foot;
+                        setState(Enemy.State.stay);
+                    }
+                }
+                y += dy;
+                dstRect.offset(0, dy);
+                break;
+        }
         fixCollisionRect();
     }
 
