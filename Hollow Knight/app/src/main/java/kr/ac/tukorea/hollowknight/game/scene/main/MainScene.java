@@ -26,7 +26,7 @@ public class MainScene extends Scene {
     //private final Enemy1 enemy;
 
     public enum Layer{
-        bg,platform, player,enemy1,ui, touch, controller, COUNT,
+        bg,platform, player,enemy,ui, touch, controller, COUNT,
     }
     public MainScene(){
         initLayers(Layer.COUNT);
@@ -36,7 +36,7 @@ public class MainScene extends Scene {
         add(Layer.player,player);
 
         enemy = new Enemy();
-        add(Layer.enemy1, enemy);
+        add(Layer.enemy, enemy);
 
         Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정
         //Rect zoomArea = new Rect(0, 300, 100, 478);

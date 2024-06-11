@@ -35,7 +35,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
 
-    protected State state = State.move;
+    protected State state = State.stay;
 
     //private boolean reverse = false;
 
@@ -151,11 +151,21 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
             case stay:
                 float foot = collisionRect.bottom;
                 float floor = findNearestPlatformTop(foot);
+
+                if (foot < floor) {
+                    setState(Enemy.State.falling);
+                    jumpSpeed = 0;
+                }
+                break;
+            case move:
+                foot = collisionRect.bottom;
+                floor = findNearestPlatformTop(foot);
                 float dx = moveSpeed * elapsedSeconds;
                 if (foot < floor) {
                     setState(Enemy.State.falling);
                     jumpSpeed = 0;
-                } else {
+                }
+                else {
                     // 이동 로직
                     if (!reverse) {
                         x -= dx; // 왼쪽으로 1 픽셀 이동
@@ -171,14 +181,6 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
                         reverse = !reverse;  // 방향 전환
                         moveDistance = 0;  // 이동 거리 카운터 리셋
                     }
-                }
-                break;
-            case move:
-                foot = collisionRect.bottom;
-                floor = findNearestPlatformTop(foot);
-                if (foot < floor) {
-                    setState(Enemy.State.falling);
-                    jumpSpeed = 0;
                 }
                 break;
             case turn:

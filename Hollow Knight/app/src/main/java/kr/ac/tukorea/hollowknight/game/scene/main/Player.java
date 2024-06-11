@@ -128,7 +128,20 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 platform.scrollRight();
             }
         }
+    }
 
+    private void scrollEnemy(){
+        MainScene scene = (MainScene) Scene.top();
+        ArrayList<IGameObject> enemies = scene.objectsAt(MainScene.Layer.enemy);
+        for(IGameObject obj : enemies){
+            Enemy enemy = (Enemy) obj;
+            if(maxLeft){
+                enemy.scrollLeft();
+            }
+            else if(maxRight){
+                enemy.scrollRight();
+            }
+        }
     }
 
 
@@ -196,6 +209,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
             }
 
             scrollPlayform();
+            scrollEnemy();
             break;
 
         case attack:
