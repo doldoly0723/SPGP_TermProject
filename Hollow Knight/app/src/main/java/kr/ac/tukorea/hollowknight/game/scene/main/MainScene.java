@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.util.Log;
 
 import kr.ac.tukorea.framework.objects.Button;
+import kr.ac.tukorea.framework.objects.CollisionChecker;
 import kr.ac.tukorea.framework.objects.HorzScrollBackground;
 import kr.ac.tukorea.framework.objects.ScrollBackground;
 import kr.ac.tukorea.framework.interfaces.IGameObject;
@@ -53,6 +54,8 @@ public class MainScene extends Scene {
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 7));
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 5));
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 3));
+
+        add(Layer.controller, new CollisionChecker(this,player));
 
         add(Layer.touch, new Button(R.mipmap.controller_left, 2.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
             public boolean onTouch(Button.Action action){

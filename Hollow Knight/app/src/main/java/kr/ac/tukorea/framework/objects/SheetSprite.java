@@ -19,13 +19,13 @@ public class SheetSprite extends AnimSprite {
     }
     public void scrollUp(){
         float vy = 0.1f;
-        y -= vy;
+        y += vy;
         dstRect.offset(0.0f,vy);
     }
 
     public void scrollDown(){
         float vy = 0.1f;
-        y += vy;
+        y -= vy;
         dstRect.offset(0.0f, -vy);
     }
 

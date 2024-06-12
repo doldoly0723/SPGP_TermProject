@@ -12,6 +12,7 @@ import kr.ac.tukorea.framework.interfaces.IGameObject;
 import kr.ac.tukorea.framework.objects.SheetSprite;
 import kr.ac.tukorea.framework.objects.Sprite;
 import kr.ac.tukorea.framework.scene.Scene;
+import kr.ac.tukorea.framework.util.CollisionHelper;
 import kr.ac.tukorea.framework.view.Metrics;
 import kr.ac.tukorea.hollowknight.R;
 
@@ -33,7 +34,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private boolean attackOn;
 
     public enum State{
-        stay, running, jump, attack, falling, attackEffect
+        stay, running, jump, attack, falling, attackEffect, hurt, dead,
     }
 
     private float jumpSpeed;
@@ -41,6 +42,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private static final float JUMP_POWER = 9.0f;
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
+
+    protected Enemy enemy;
+    protected Enemy2 enemy2;
 
     protected State state = State.stay;
 
@@ -68,7 +72,11 @@ public class Player extends SheetSprite implements IBoxCollidable {
             // fall
             makeRects(905,906,907),
             // attack effect
-            makeRects(1213, 1214, 1215)
+            makeRects(1213, 1214, 1215),
+            // hurt
+            makeRects(200,201,202,203),
+            //dead
+            makeRects(9)
     };
     protected static float[][] edgeInsetRatios = {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
@@ -77,6 +85,8 @@ public class Player extends SheetSprite implements IBoxCollidable {
             { -1.0f, 0.0f, -1.0f, 0.0f }, // State.attack
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
             {0.0f, 0.0f, 0.0f, 0.0f},   // attack effect
+            {0.0f, 0.0f, 0.0f, 0.0f},   // hurt
+            {0.0f, 0.0f, 0.0f, 0.0f},   // dead
     };
 
     public Player()  {
@@ -284,7 +294,16 @@ public class Player extends SheetSprite implements IBoxCollidable {
             // 공격 이펙트를 플레이어의 우측에 그리기 srcRectArray[State.attackEffect.ordinal()]
 
             break;
-
+        case hurt:
+//            if(!CollisionHelper.collides(this,enemy)){
+//                setState(State.stay);
+//                enemy = null;
+//            }
+            if(!CollisionHelper.collides(this,enemy2)){
+                setState(State.stay);
+                enemy2 = null;
+            }
+            break;
         }
         fixCollisionRect();
     }
@@ -337,6 +356,18 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
 
 
+    public void hurt(Enemy enemy){
+        if(state == State.hurt) return;
+        setState(State.hurt);
+        fixCollisionRect();
+        this.enemy = enemy;
+    }
+    public void hurt(Enemy2 enemy2){
+        if(state == State.hurt) return;
+        setState(State.hurt);
+        fixCollisionRect();
+        this.enemy2 = enemy2;
+    }
 
     public void stay(){
         setState(State.stay);

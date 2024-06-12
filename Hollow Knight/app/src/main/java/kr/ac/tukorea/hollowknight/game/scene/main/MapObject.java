@@ -59,13 +59,13 @@ public abstract class MapObject extends Sprite implements IBoxCollidable, IRecyc
 
     public void scrollUp(){
         float vy = elapsedTime * scrollSpeed;
-        y -= vy;
+        y += vy;
         dstRect.offset(0.0f,vy);
     }
 
     public void scrollDown(){
         float vy = elapsedTime * scrollSpeed;
-        y += vy;
+        y -= vy;
         dstRect.offset(0.0f, -vy);
     }
 }
