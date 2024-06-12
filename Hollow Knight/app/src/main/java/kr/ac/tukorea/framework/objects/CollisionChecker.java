@@ -24,7 +24,6 @@ public class CollisionChecker implements IGameObject {
         // enemy와 충돌 체크
         checkEnemy();
         checkEnemy2();
-
     }
 
     public void checkEnemy(){
@@ -40,6 +39,10 @@ public class CollisionChecker implements IGameObject {
                     enemy.hurt();
                 }
             }
+
+            if(enemy.getdeadOn()){
+                scene.remove(MainScene.Layer.enemy, enemy);
+            }
         }
     }
     public void checkEnemy2(){
@@ -53,6 +56,9 @@ public class CollisionChecker implements IGameObject {
                 else if(player.getattackOn()){
                     enemy2.hurt();
                 }
+            }
+            if(enemy2.getdeadOn()){
+                scene.remove(MainScene.Layer.enemy2, enemy2);
             }
         }
     }

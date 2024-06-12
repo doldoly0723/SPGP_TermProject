@@ -24,6 +24,10 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
     private int attackframeCount;
     private Canvas canvas;
     private float moveDistance = 0.0f;
+    private int hurtFrameCount;
+    private int hp = 10;
+    private int deadFrameCount;
+    private boolean deadOn = false;
 
     public enum State{
         stay, move, turn, hurt, dead, falling,
@@ -186,8 +190,16 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
             case turn:
                 break;
             case hurt:
+                hurtFrameCount--;
+                if(hurtFrameCount == 0){
+                    setState(State.stay);
+                }
                 break;
             case dead:
+                deadFrameCount--;
+                if(deadFrameCount == 0){
+                    deadOn = true;
+                }
                 break;
             case falling:
                 float dy = jumpSpeed * elapsedSeconds;
@@ -208,10 +220,20 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
     }
 
     public void hurt(){
-        setState(State.hurt);
+        hp--;
+        if(hp <= 0){
+            setState(Enemy.State.dead);
+            deadFrameCount =srcRectArray[Enemy.State.dead.ordinal()].length;
+        }
+        else{
+            setState(Enemy.State.hurt);
+            hurtFrameCount = srcRectArray[Enemy.State.hurt.ordinal()].length;
+        }
     }
 
-
+    public boolean getdeadOn(){
+        return deadOn;
+    }
     public void stay(){
         setState(State.stay);
     }
