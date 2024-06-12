@@ -133,6 +133,12 @@ public class Player extends SheetSprite implements IBoxCollidable {
             else if(maxRight && rightOn){
                 platform.scrollRight();
             }
+            if(maxUp){
+                platform.scrollUp();
+            }
+            else if(maxDown){
+                platform.scrollDown();
+            }
         }
     }
 
@@ -208,6 +214,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
             y += dy;
             dstRect.offset(0, dy);
+
+            scrollPlayform();
+            scrollEnemy();
             break;
         case stay:
             float foot = collisionRect.bottom;
