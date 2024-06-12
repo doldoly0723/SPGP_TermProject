@@ -153,6 +153,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
             else if(maxRight && rightOn){
                 enemy.scrollRight();
             }
+            if(maxUp)
+                enemy.scrollUp();
+            else if(maxDown)
+                enemy.scrollDown();
         }
         ArrayList<IGameObject> enemies2 = scene.objectsAt(MainScene.Layer.enemy2);
         for(IGameObject obj : enemies2){
@@ -163,6 +167,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
             else if(maxRight && rightOn){
                 enemy2.scrollRight();
             }
+            if(maxUp)
+                enemy2.scrollUp();
+            else if(maxDown)
+                enemy2.scrollDown();
         }
     }
 

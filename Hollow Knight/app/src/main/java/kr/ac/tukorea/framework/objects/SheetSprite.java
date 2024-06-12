@@ -17,7 +17,17 @@ public class SheetSprite extends AnimSprite {
         x -= vx;
         dstRect.offset(-vx, 0.0f);
     }
+    public void scrollUp(){
+        float vy = 0.1f;
+        y -= vy;
+        dstRect.offset(0.0f,vy);
+    }
 
+    public void scrollDown(){
+        float vy = 0.1f;
+        y += vy;
+        dstRect.offset(0.0f, -vy);
+    }
 
     public SheetSprite(int mipmapResId, float fps) {
         super(mipmapResId, fps, 1);
