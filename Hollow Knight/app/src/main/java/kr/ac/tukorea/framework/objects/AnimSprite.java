@@ -44,6 +44,7 @@ public class AnimSprite extends Sprite {
         }
     }
 
+
     @Override
     public void draw(Canvas canvas) {
 

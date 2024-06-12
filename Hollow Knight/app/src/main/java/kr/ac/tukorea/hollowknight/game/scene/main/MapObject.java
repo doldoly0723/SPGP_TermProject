@@ -13,7 +13,7 @@ public abstract class MapObject extends Sprite implements IBoxCollidable, IRecyc
         super(0);
     }
     private static final String TAG = MapObject.class.getSimpleName();
-    private float moveSpeed = 4.0f;
+
     private float elapsedTime;
     @Override
     public void update(float elapsedSeconds) {
@@ -47,9 +47,9 @@ public abstract class MapObject extends Sprite implements IBoxCollidable, IRecyc
     }
 
     public void scrollLeft(){
-        dstRect.offset(elapsedTime * moveSpeed, 0.0f);
+        dstRect.offset(elapsedTime * scrollSpeed, 0.0f);
     }
     public void scrollRight(){
-        dstRect.offset(-elapsedTime * moveSpeed, 0.0f);
+        dstRect.offset(-elapsedTime * scrollSpeed, 0.0f);
     }
 }
