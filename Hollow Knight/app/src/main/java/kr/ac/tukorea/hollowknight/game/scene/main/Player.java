@@ -333,7 +333,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
         //srcRects = srcRectArray[ord];
     }
     public void attack(){
-        if(state == State.stay || state == State.running){
+        if(state == State.stay || state == State.running || state == State.jump){
             setState(State.attack);
             attackframeCount = srcRectArray[State.attack.ordinal()].length;
 
