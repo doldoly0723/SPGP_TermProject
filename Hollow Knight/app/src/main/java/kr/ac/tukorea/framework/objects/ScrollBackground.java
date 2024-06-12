@@ -41,20 +41,19 @@ public class ScrollBackground extends Sprite{
     @Override
     public void draw(Canvas canvas) {
         // 화면 전체에 확대된 이미지를 그립니다.
-        if(player.isMaxLeft()){
-            dstRect.set(0 , 0, Metrics.width, Metrics.height);
-            srcRect.offset(-1,0);
-            canvas.drawBitmap(bitmap, srcRect, dstRect, null);
-        }else if(player.isMaxRight()){
-            dstRect.set(0 , 0, Metrics.width, Metrics.height);
-            srcRect.offset(1,0);
-            canvas.drawBitmap(bitmap, srcRect, dstRect, null);
+        dstRect.set(0 , 0, Metrics.width, Metrics.height);
+        if(player.isMaxLeft()){         // 플레이어가 왼쪽 경계선에 도달
+            if(srcRect.left > 0){
+                srcRect.offset(-1,0);
+            }
+        }else if(player.isMaxRight()){      // 플레이어가 오른쪽 경계선에 도달
+            if(srcRect.right < bitmap.getWidth()){
+                srcRect.offset(1,0);
+            }
         }
         else{
-            dstRect.set(0 , 0, Metrics.width, Metrics.height);
             srcRect.offset(0,0);
-            canvas.drawBitmap(bitmap, srcRect, dstRect, null);
         }
-
+        canvas.drawBitmap(bitmap, srcRect, dstRect, null);
     }
 }
