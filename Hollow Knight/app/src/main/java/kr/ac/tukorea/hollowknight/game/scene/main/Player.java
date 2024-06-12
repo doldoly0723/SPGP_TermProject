@@ -25,6 +25,8 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private boolean maxLeft;
     private int attackframeCount;
     private Canvas canvas;
+    private boolean leftOn;
+    private boolean rightOn;
 
     public enum State{
         stay, running, jump, attack, falling, attackEffect
@@ -121,10 +123,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
         ArrayList<IGameObject> platforms = scene.objectsAt(MainScene.Layer.platform);
         for(IGameObject obj : platforms){
             Platform platform = (Platform) obj;
-            if(maxLeft){
+            if(maxLeft && leftOn){
                 platform.scrollLeft();
             }
-            else if(maxRight){
+            else if(maxRight && rightOn){
                 platform.scrollRight();
             }
         }
@@ -135,10 +137,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
         ArrayList<IGameObject> enemies = scene.objectsAt(MainScene.Layer.enemy);
         for(IGameObject obj : enemies){
             Enemy enemy = (Enemy) obj;
-            if(maxLeft){
+            if(maxLeft && leftOn){
                 enemy.scrollLeft();
             }
-            else if(maxRight){
+            else if(maxRight && rightOn){
                 enemy.scrollRight();
             }
         }
@@ -257,6 +259,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
         if(state == State.running && !startright){
             setState(State.stay);
         }
+        rightOn = startright;
     }
 
     public void leftMove(boolean startLeft){
@@ -267,6 +270,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
         if(state == State.running && !startLeft){
             setState(State.stay);
         }
+        leftOn = startLeft;
     }
 
 
@@ -284,10 +288,16 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
 
     public boolean isMaxRight() {
-        return this.maxRight;
+        if(rightOn){
+            return this.maxRight;
+        }
+        return false;
     }
     public boolean isMaxLeft() {
-        return this.maxLeft;
+        if(leftOn){
+            return this.maxLeft;
+        }
+        return false;
     }
 
 
