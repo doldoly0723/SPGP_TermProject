@@ -23,6 +23,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private float startPosY = 3.0f;
     private boolean maxRight;
     private boolean maxLeft;
+
+    private boolean maxUp;
+    private boolean maxDown;
     private int attackframeCount;
     private Canvas canvas;
     private boolean leftOn;
@@ -183,6 +186,20 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 x -= dx;
                 dstRect.offset(-dx,0);
             }
+            // 화면 상하 스크롤 되도록
+            // 만약 점프했을때 화면의 위쪽에 닿으면 maxUp을 true
+            if(y -dy < 0 + 1) {
+                maxUp= true;
+                maxDown = false;
+            }
+            else{
+                maxUp = false;
+                maxDown = false;
+            }
+            // 만약 화면의 아래쪽에 닿으면 maxDown을 true
+
+
+
             y += dy;
             dstRect.offset(0, dy);
             break;
@@ -321,6 +338,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
             return this.maxLeft;
         }
         return false;
+    }
+
+    public boolean isMaxTop(){
+        return this.maxUp;
     }
 
 

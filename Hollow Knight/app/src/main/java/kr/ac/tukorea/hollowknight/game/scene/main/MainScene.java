@@ -51,6 +51,8 @@ public class MainScene extends Scene {
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 0, 7));
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 8, 7));
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 7));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 3));
 
         add(Layer.touch, new Button(R.mipmap.controller_left, 2.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
