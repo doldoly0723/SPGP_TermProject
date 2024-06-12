@@ -57,6 +57,11 @@ public class ScrollBackground extends Sprite{
             }
 
         }
+        else if(player.isMaxDown()){
+            if(srcRect.bottom > 0){
+                srcRect.offset(0,1);
+            }
+        }
         else{
             srcRect.offset(0,0);
         }

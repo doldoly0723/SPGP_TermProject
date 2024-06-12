@@ -188,9 +188,15 @@ public class Player extends SheetSprite implements IBoxCollidable {
             }
             // 화면 상하 스크롤 되도록
             // 만약 점프했을때 화면의 위쪽에 닿으면 maxUp을 true
-            if(y -dy < 0 + 1) {
+            if(y -dy < 0 + 0.3) {
                 maxUp= true;
                 maxDown = false;
+            }
+            else if(y + dy + dstRect.height() > Metrics.height +0.5){
+                dy = 0;
+                y -= dy;
+                maxDown = true;
+                maxUp = false;
             }
             else{
                 maxUp = false;
@@ -342,6 +348,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
     public boolean isMaxTop(){
         return this.maxUp;
+    }
+
+    public boolean isMaxDown(){
+        return this.maxDown;
     }
 
 
