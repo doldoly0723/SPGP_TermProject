@@ -27,6 +27,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private Canvas canvas;
     private boolean leftOn;
     private boolean rightOn;
+    private boolean attackOn;
 
     public enum State{
         stay, running, jump, attack, falling, attackEffect
@@ -162,6 +163,16 @@ public class Player extends SheetSprite implements IBoxCollidable {
                     setState(State.stay);
                 }
             }
+            if(rightOn){
+                float dx = moveSpeed * elapsedSeconds;
+                x += dx;
+                dstRect.offset(dx, 0);
+            }
+            else if(leftOn){
+                float dx = moveSpeed * elapsedSeconds;
+                x -= dx;
+                dstRect.offset(-dx,0);
+            }
             y += dy;
             dstRect.offset(0, dy);
             break;
@@ -253,23 +264,25 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
     public void rightMove(boolean startright){
         if(state == State.stay && startright) {
-            reverse = false;
+
             setState(State.running);
         }
         if(state == State.running && !startright){
             setState(State.stay);
         }
+        reverse = false;
         rightOn = startright;
     }
 
     public void leftMove(boolean startLeft){
         if(state == State.stay && startLeft) {
-            reverse = true;
+
             setState(State.running);
         }
         if(state == State.running && !startLeft){
             setState(State.stay);
         }
+        reverse = true;
         leftOn = startLeft;
     }
 
