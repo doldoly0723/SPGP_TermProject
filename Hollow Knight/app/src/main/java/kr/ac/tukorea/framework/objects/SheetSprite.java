@@ -7,9 +7,15 @@ public class SheetSprite extends AnimSprite {
     protected Rect[] srcRects;
     protected boolean reverse;
 
-    public void scrollLeft(){dstRect.offset(0.1f, 0.0f);}
+    public void scrollLeft(){
+        float vx = 0.1f;
+        x += vx;
+        dstRect.offset(vx, 0.0f);
+    }
     public void scrollRight(){
-        dstRect.offset(-0.1f, 0.0f);
+        float vx = 0.1f;
+        x -= vx;
+        dstRect.offset(-vx, 0.0f);
     }
 
 

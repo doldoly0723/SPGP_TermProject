@@ -145,6 +145,16 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 enemy.scrollRight();
             }
         }
+        ArrayList<IGameObject> enemies2 = scene.objectsAt(MainScene.Layer.enemy2);
+        for(IGameObject obj : enemies2){
+            Enemy2 enemy2 = (Enemy2) obj;
+            if(maxLeft && leftOn){
+                enemy2.scrollLeft();
+            }
+            else if(maxRight && rightOn){
+                enemy2.scrollRight();
+            }
+        }
     }
 
 

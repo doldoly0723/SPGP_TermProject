@@ -27,7 +27,7 @@ public class MainScene extends Scene {
     //private final Enemy1 enemy;
 
     public enum Layer{
-        bg,platform, player,enemy, enemy2,ui, touch, controller, COUNT,
+        bg,platform, enemy, enemy2,player,ui, touch, controller, COUNT,
     }
     public MainScene(){
         initLayers(Layer.COUNT);
