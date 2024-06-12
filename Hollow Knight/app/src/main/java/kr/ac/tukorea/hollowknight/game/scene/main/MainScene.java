@@ -40,7 +40,7 @@ public class MainScene extends Scene {
         enemy = new Enemy();
         add(Layer.enemy, enemy);
 
-        enemy2 = new Enemy2();
+        enemy2 = new Enemy2(player);
         add(Layer.enemy2, enemy2);
 
         Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정

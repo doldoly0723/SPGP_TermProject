@@ -19,7 +19,7 @@ public class CollisionChecker implements IGameObject {
         this.scene = scene;
         this.player = player;
     }
-    
+
     public void update(float elapsedSeconds){
         // enemy와 충돌 체크
         checkEnemy();

@@ -17,6 +17,7 @@ import kr.ac.tukorea.hollowknight.R;
 public class Enemy2 extends SheetSprite implements IBoxCollidable {
 
     private static final float MOVE_LIMIT = 5.0f;
+    private final Player player;
     private float startPosX = 13.0f;
     private float startPosY = 3.0f;
     private boolean maxRight;
@@ -95,8 +96,9 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.dead
     };
 
-    public Enemy2()  {
+    public Enemy2(Player player)  {
         super(R.mipmap.aspid,8);
+        this.player = player;
         reverse = false;                // 처음에는 항상 오른쪽을 보고 시작
         setPosition(startPosX,startPosY, 1.8f, 2.0f);
         srcRects = srcRectArray[state.ordinal()];
@@ -140,12 +142,40 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
 
     @Override
     public void update(float elapsedSeconds) {
+        float playerPosX = player.getPosX();  // 플레이어의 x 위치를 가져옵니다.
+        float playerPosY = player.getPosY();  // 플레이어의 y 위치를 가져옵니다.
+        float distanceX = Math.abs(playerPosX - x);  // 플레이어와의 X축 거리 계산
+        float distanceY = Math.abs(playerPosY - y);  // 플레이어와의 Y축 거리 계산
         switch (state){
             case stay:
+                // 플레이어가 X축과 Y축에서 5 픽셀 이내에 있으면 move 상태로 변경
+                if (distanceX <= MOVE_LIMIT && distanceY <= MOVE_LIMIT) {
+                    setState(State.move);
+                }
+                break;
 
-                break;
             case move:
-                break;
+                // 플레이어의 위치에 따라 이동
+                if (playerPosX > x) {
+                    float dx = moveSpeed * elapsedSeconds * 0.1f;
+                    x += dx;
+                    dstRect.offset(dx,0);
+                } else {
+                    float dx = moveSpeed * elapsedSeconds;
+                    x -= dx;
+                    dstRect.offset(-dx,0);
+                }
+
+                // 플레이어가 위에 있으면 위로 이동, 아래에 있으면 아래로 이동
+                if (playerPosY > y) {
+                    float dy = moveSpeed * elapsedSeconds * 0.1f;
+                    y += dy;
+                    dstRect.offset(0, dy);
+                } else {
+                    float dy = moveSpeed * elapsedSeconds;
+                    y -= dy;
+                    dstRect.offset(0, -dy);
+                }
             case turn:
                 break;
             case hurt:
