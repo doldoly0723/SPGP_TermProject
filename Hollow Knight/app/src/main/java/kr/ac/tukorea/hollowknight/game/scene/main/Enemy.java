@@ -207,7 +207,9 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
         fixCollisionRect();
     }
 
-
+    public void hurt(){
+        setState(State.hurt);
+    }
 
 
     public void stay(){

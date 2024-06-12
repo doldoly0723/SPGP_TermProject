@@ -32,7 +32,13 @@ public class CollisionChecker implements IGameObject {
         for(int i = enemies.size() - 1; i >=0;i--){
             Enemy enemy = (Enemy) enemies.get(i);
             if(CollisionHelper.collides(player, enemy)){
-                player.hurt(enemy);
+                if(!player.getattackOn()){
+                    player.hurt(enemy);
+                }
+                else if(player.getattackOn()){
+                    // 몬스터 hurt
+                    enemy.hurt();
+                }
             }
         }
     }
@@ -41,7 +47,12 @@ public class CollisionChecker implements IGameObject {
         for(int i = enemies2.size() - 1; i >=0;i--){
             Enemy2 enemy2 = (Enemy2) enemies2.get(i);
             if(CollisionHelper.collides(player, enemy2)){
-                player.hurt(enemy2);
+                if(!player.getattackOn()){
+                    player.hurt(enemy2);
+                }
+                else if(player.getattackOn()){
+                    enemy2.hurt();
+                }
             }
         }
     }

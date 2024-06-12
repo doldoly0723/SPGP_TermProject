@@ -35,7 +35,7 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
 
-    protected State state = State.hurt;
+    protected State state = State.stay;
 
     //private boolean reverse = false;
 
@@ -152,6 +152,10 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
     }
 
 
+    public void hurt(){
+        setState(State.hurt);
+    }
+
 
 
     public void stay(){
@@ -177,6 +181,5 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
     public RectF getCollisionRect(){
         return collisionRect;
     }
-
 
 }

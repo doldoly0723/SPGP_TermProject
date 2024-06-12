@@ -31,7 +31,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private Canvas canvas;
     private boolean leftOn;
     private boolean rightOn;
-    private boolean attackOn;
+    private boolean attackOn = false;
 
     private long hurtStartTime;  // hurt 상태에 들어간 시점
     private static final long HURT_DURATION = 3000; // hurt 상태 지속 시간 (밀리초)
@@ -334,6 +334,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
     public void attack(){
         if(state == State.stay || state == State.running || state == State.jump){
+            attackOn = true;
             setState(State.attack);
             attackframeCount = srcRectArray[State.attack.ordinal()].length;
 
@@ -383,6 +384,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
         setState(State.hurt);
         fixCollisionRect();
         this.enemy2 = enemy2;
+    }
+
+    public boolean getattackOn(){
+        return attackOn;
     }
 
     public void stay(){
