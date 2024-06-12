@@ -35,7 +35,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
     private long hurtStartTime;  // hurt 상태에 들어간 시점
     private static final long HURT_DURATION = 3000; // hurt 상태 지속 시간 (밀리초)
+    private static final long ATTACK_DURATION = 500;
     private boolean hurtOn = false;
+    private long attackStartTime;
+    private boolean delayOn = false;
 
     public enum State{
         stay, running, jump, attack, falling, attackEffect, hurt, dead,
@@ -293,6 +296,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
             attackframeCount--;
             if(attackframeCount == 0){
                 setState(State.stay);
+                attackOn = false;
             }
 
             // 공격 이펙트를 플레이어의 우측에 그리기 srcRectArray[State.attackEffect.ordinal()]
@@ -333,19 +337,32 @@ public class Player extends SheetSprite implements IBoxCollidable {
         //srcRects = srcRectArray[ord];
     }
     public void attack(){
-        if(state == State.stay || state == State.running || state == State.jump){
-            attackOn = true;
-            setState(State.attack);
-            attackframeCount = srcRectArray[State.attack.ordinal()].length;
+        if(state == State.stay || state == State.running || state == State.jump || state == State.falling){
+            if(!attackOn && !delayOn){
+                attackStartTime = System.currentTimeMillis();
+                attackOn = true;
+            }
 
-            if(reverse){
-                edgeInsetRatios[3][2] =  0.0f; // State.attack right
-                edgeInsetRatios[3][0] =  -1.0f; // State.attack left
+            // 0.5초가 지났다면
+            if(System.currentTimeMillis() - attackStartTime >= ATTACK_DURATION){
+                delayOn = false;
             }
-            else{
-                edgeInsetRatios[3][0] =  0.0f; // State.attack left
-                edgeInsetRatios[3][2] =  -1.0f; // State.attack right
+
+            if(attackOn && !delayOn){
+                setState(State.attack);
+                attackframeCount = srcRectArray[State.attack.ordinal()].length;
+
+                if(reverse){
+                    edgeInsetRatios[3][2] =  0.0f; // State.attack right
+                    edgeInsetRatios[3][0] =  -1.0f; // State.attack left
+                }
+                else{
+                    edgeInsetRatios[3][0] =  0.0f; // State.attack left
+                    edgeInsetRatios[3][2] =  -1.0f; // State.attack right
+                }
+                delayOn = true;
             }
+
         }
     }
     public void rightMove(boolean startright){
