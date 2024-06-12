@@ -18,7 +18,7 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
 
     private static final float MOVE_LIMIT = 5.0f;
     private final Player player;
-    private float startPosX = 13.0f;
+    private float startPosX = 16.0f;
     private float startPosY = 3.0f;
     private boolean maxRight;
     private boolean maxLeft;
@@ -78,7 +78,7 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
     }
     protected static Rect[][]srcRectArray = {
             //stay  3 22 116 85
-            makemoveRects(0), //3 22 83 90   89
+            makemoveRects(0,1,2,3), //3 22 83 90   89
             // move
             makemoveRects(0,1,2,3),
             //turn
@@ -160,10 +160,12 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
                     float dx = moveSpeed * elapsedSeconds * 0.1f;
                     x += dx;
                     dstRect.offset(dx,0);
+                    reverse = true;
                 } else {
-                    float dx = moveSpeed * elapsedSeconds;
+                    float dx = moveSpeed * elapsedSeconds * 0.1f;
                     x -= dx;
                     dstRect.offset(-dx,0);
+                    reverse = false;
                 }
 
                 // 플레이어가 위에 있으면 위로 이동, 아래에 있으면 아래로 이동
@@ -172,7 +174,7 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
                     y += dy;
                     dstRect.offset(0, dy);
                 } else {
-                    float dy = moveSpeed * elapsedSeconds;
+                    float dy = moveSpeed * elapsedSeconds * 0.1f;
                     y -= dy;
                     dstRect.offset(0, -dy);
                 }

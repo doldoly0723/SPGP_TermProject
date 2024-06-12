@@ -37,7 +37,7 @@ public class MainScene extends Scene {
         player = new Player();
         add(Layer.player,player);
 
-        enemy = new Enemy();
+        enemy = new Enemy(player);
         add(Layer.enemy, enemy);
 
         enemy2 = new Enemy2(player);

@@ -17,7 +17,8 @@ import kr.ac.tukorea.hollowknight.R;
 public class Enemy extends SheetSprite implements IBoxCollidable {
 
     private static final float MOVE_LIMIT = 5.0f;
-    private float startPosX = 13.0f;
+    private final Player player;
+    private float startPosX = 16.0f;
     private float startPosY = 5.0f;
     private boolean maxRight;
     private boolean maxLeft;
@@ -30,7 +31,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
     private boolean deadOn = false;
 
     public enum State{
-        stay, move, turn, hurt, dead, falling,
+        stay, move, turn, hurt, dead, falling, attack,
     }
 
     private float jumpSpeed;
@@ -96,6 +97,8 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
             makedeadRects(300, 301),    //3 376 128 90  134
             // falling
             makehurtRects(200, 201),
+            // attack
+            makemoveRects(0,1,2),
     };
     protected static float[][] edgeInsetRatios = {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
@@ -104,10 +107,12 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.hurt
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.dead
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attack
     };
 
-    public Enemy()  {
+    public Enemy(Player player)  {
         super(R.mipmap.crawlid,8);
+        this.player = player;
         reverse = false;                // 처음에는 항상 오른쪽을 보고 시작
         setPosition(startPosX,startPosY, 1.8f, 2.0f);
         srcRects = srcRectArray[state.ordinal()];
@@ -151,6 +156,10 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
 
     @Override
     public void update(float elapsedSeconds) {
+        float playerPosX = player.getPosX();  // 플레이어의 x 위치를 가져옵니다.
+        float playerPosY = player.getPosY();  // 플레이어의 y 위치를 가져옵니다.
+        float distanceX = Math.abs(playerPosX - x);  // 플레이어와의 X축 거리 계산
+        float distanceY = Math.abs(playerPosY - y);  // 플레이어와의 Y축 거리 계산
         switch (state){
             case stay:
                 float foot = collisionRect.bottom;
@@ -159,6 +168,11 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
                 if (foot < floor) {
                     setState(Enemy.State.falling);
                     jumpSpeed = 0;
+                }
+
+                if(distanceX <= MOVE_LIMIT){
+                    //state Attack로 할짖 생각해보기
+                    setState(State.attack);
                 }
                 break;
             case move:
@@ -185,6 +199,19 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
                         reverse = !reverse;  // 방향 전환
                         moveDistance = 0;  // 이동 거리 카운터 리셋
                     }
+                }
+                break;
+            case attack:
+                if (playerPosX > x) {
+                    float dvx = moveSpeed * elapsedSeconds * 0.3f;
+                    x += dvx;
+                    dstRect.offset(dvx,0);
+                    reverse = true;
+                } else {
+                    float dvx = moveSpeed * elapsedSeconds * 0.3f;
+                    x -= dvx;
+                    dstRect.offset(-dvx,0);
+                    reverse = false;
                 }
                 break;
             case turn:
