@@ -33,6 +33,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private boolean rightOn;
     private boolean attackOn;
 
+    private long hurtStartTime;  // hurt 상태에 들어간 시점
+    private static final long HURT_DURATION = 3000; // hurt 상태 지속 시간 (밀리초)
+    private boolean hurtOn = false;
+
     public enum State{
         stay, running, jump, attack, falling, attackEffect, hurt, dead,
     }
@@ -295,13 +299,25 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
             break;
         case hurt:
-//            if(!CollisionHelper.collides(this,enemy)){
-//                setState(State.stay);
-//                enemy = null;
-//            }
-            if(!CollisionHelper.collides(this,enemy2)){
-                setState(State.stay);
-                enemy2 = null;
+            if(!hurtOn){
+                hurtStartTime = System.currentTimeMillis();  // hurt 상태 시작 시간 기록
+                hurtOn = true;
+            }
+
+            if (System.currentTimeMillis() - hurtStartTime >= HURT_DURATION) {
+                setState(State.stay);  // 3초가 지난 후 stay 상태로 전환
+                hurtOn = false;
+            }
+
+            if(rightOn){
+                dx = moveSpeed * elapsedSeconds;
+                x += dx;
+                dstRect.offset(dx, 0);
+            }
+            else if(leftOn){
+                dx = moveSpeed * elapsedSeconds;
+                x -= dx;
+                dstRect.offset(-dx,0);
             }
             break;
         }

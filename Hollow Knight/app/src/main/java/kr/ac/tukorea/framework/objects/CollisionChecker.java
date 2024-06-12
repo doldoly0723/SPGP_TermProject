@@ -22,6 +22,12 @@ public class CollisionChecker implements IGameObject {
 
     public void update(float elapsedSeconds){
         // enemy와 충돌 체크
+        checkEnemy();
+        checkEnemy2();
+
+    }
+
+    public void checkEnemy(){
         ArrayList<IGameObject> enemies = scene.objectsAt(MainScene.Layer.enemy);
         for(int i = enemies.size() - 1; i >=0;i--){
             Enemy enemy = (Enemy) enemies.get(i);
@@ -29,6 +35,8 @@ public class CollisionChecker implements IGameObject {
                 player.hurt(enemy);
             }
         }
+    }
+    public void checkEnemy2(){
         ArrayList<IGameObject> enemies2 = scene.objectsAt(MainScene.Layer.enemy2);
         for(int i = enemies2.size() - 1; i >=0;i--){
             Enemy2 enemy2 = (Enemy2) enemies2.get(i);
