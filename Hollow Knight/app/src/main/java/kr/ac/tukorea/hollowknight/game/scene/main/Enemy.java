@@ -18,7 +18,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
 
     private static final float MOVE_LIMIT = 5.0f;
     private final Player player;
-    private float startPosX = 16.0f;
+    private float startPosX = 20.0f;
     private float startPosY = 5.0f;
     private boolean maxRight;
     private boolean maxLeft;
@@ -40,7 +40,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
 
-    protected State state = State.stay;
+    protected State state = State.move;
 
     //private boolean reverse = false;
 
@@ -120,7 +120,8 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
     }
     private float findNearestPlatformTop(float foot) {
         MainScene scene = (MainScene) Scene.top();
-        if (scene == null) return Metrics.height;
+        if (scene == null)
+            return Metrics.height;
         ArrayList<IGameObject> platforms = scene.objectsAt(MainScene.Layer.platform);
         float top = Metrics.height;
         for (IGameObject obj: platforms) {
@@ -139,6 +140,25 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
             //Log.d(TAG, "top=" + top + " gotcha:" + platform);
         }
         return top;
+//        MainScene scene = (MainScene) Scene.top();
+//        if (scene == null)
+//            return Float.POSITIVE_INFINITY; // 발판이 없으면 무한대 반환
+//        ArrayList<IGameObject> platforms = scene.objectsAt(MainScene.Layer.platform);
+//        float top = Float.POSITIVE_INFINITY; // 초기값을 무한대로 설정
+//        for (IGameObject obj : platforms) {
+//            Platform platform = (Platform) obj;
+//            RectF rect = platform.getCollisionRect();
+//            if (rect.left > x || x > rect.right) {
+//                continue;
+//            }
+//            if (rect.top < foot) {
+//                continue;
+//            }
+//            if (top > rect.top) {
+//                top = rect.top;
+//            }
+//        }
+//        return top;
     }
     private void fixCollisionRect(){
         float[] insets = edgeInsetRatios[state.ordinal()];
@@ -170,10 +190,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
                     jumpSpeed = 0;
                 }
 
-                if(distanceX <= MOVE_LIMIT){
-                    //state Attack로 할짖 생각해보기
-                    setState(State.attack);
-                }
+
                 break;
             case move:
                 foot = collisionRect.bottom;
@@ -198,6 +215,11 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
                     if (moveDistance >= MOVE_LIMIT) {
                         reverse = !reverse;  // 방향 전환
                         moveDistance = 0;  // 이동 거리 카운터 리셋
+                    }
+
+                    if(distanceX <= MOVE_LIMIT && distanceY <= MOVE_LIMIT){
+                        //state Attack로 할짖 생각해보기
+                        setState(State.attack);
                     }
                 }
                 break;
@@ -236,7 +258,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
                     floor = findNearestPlatformTop(foot);
                     if(foot + dy >= floor){
                         dy = floor - foot;
-                        setState(Enemy.State.stay);
+                        setState(Enemy.State.move);
                     }
                 }
                 y += dy;

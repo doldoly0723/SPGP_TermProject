@@ -107,7 +107,8 @@ public class Player extends SheetSprite implements IBoxCollidable {
         MainScene scene = (MainScene) Scene.top();
         if (scene == null) return Metrics.height;
         ArrayList<IGameObject> platforms = scene.objectsAt(MainScene.Layer.platform);
-        float top = Metrics.height;
+        float top = Metrics.height + 100;
+        //float top = Float.POSITIVE_INFINITY; // 문제점 : 일정 이상 내려가면 안그려짐
         for (IGameObject obj: platforms) {
             Platform platform = (Platform) obj;
             RectF rect = platform.getCollisionRect();
@@ -201,9 +202,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
             jumpSpeed += GRAVITY * elapsedSeconds;
             if(jumpSpeed >= 0){ // 낙하하고 있다면 발밑에 땅이 있는지 확인
                 float foot = collisionRect.bottom;
-                float floor = findNearestPlatformTop(foot);
+                float floor = findNearestPlatformTop(foot);         // 여기 무한대가 들어올때 안그려짐
                 if(foot + dy >= floor){
-                    dy = floor - foot;
+                    dy = floor - foot ;
                     setState(State.stay);
                 }
             }
