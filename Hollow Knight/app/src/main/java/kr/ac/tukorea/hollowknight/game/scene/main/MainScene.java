@@ -54,15 +54,15 @@ public class MainScene extends Scene {
         //add(Layer.bg, new ScrollBackground(R.mipmap.sameple,zoomArea));
 
         // 시작 위치
-        add(Layer.platform, Platform.get(Platform.Type.T_30x5, 0, 7));
+        //add(Layer.platform, Platform.get(Platform.Type.T_30x5, 0, 7));
 
         // 위쪽
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 28, 5));
-        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 33, 4));
+        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 33, 3));
         add(Layer.platform, Platform.get(Platform.Type.T_10x2, 39, 5));
-        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 38, 3));
-        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 44, 3));
-        add(Layer.platform, Platform.get(Platform.Type.T_10x2, 53, 4));
+        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 38, 1));
+        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 44, 1));
+        add(Layer.platform, Platform.get(Platform.Type.T_10x2, 53, 3));
 
         // 가운데
         add(Layer.platform, Platform.get(Platform.Type.T_10x2, 40, 7));
@@ -75,11 +75,15 @@ public class MainScene extends Scene {
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 30, 16));
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 30, 14));
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 30, 12));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 30, 10));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 30, 8));
 
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 50, 18));
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 50, 16));
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 50, 14));
         add(Layer.platform, Platform.get(Platform.Type.T_2x1, 50, 12));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 50, 10));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 50, 8));
 
         // 밑바닥
         add(Layer.platform, Platform.get(Platform.Type.T_30x5, 0, 20));

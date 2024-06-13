@@ -109,7 +109,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
         MainScene scene = (MainScene) Scene.top();
         if (scene == null) return Metrics.height;
         ArrayList<IGameObject> platforms = scene.objectsAt(MainScene.Layer.platform);
-        float top = Metrics.height + 100;
+        float top = Metrics.height;
         //float top = Float.POSITIVE_INFINITY; // 문제점 : 일정 이상 내려가면 안그려짐
         for (IGameObject obj: platforms) {
             Platform platform = (Platform) obj;
@@ -121,7 +121,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
             if (rect.top < foot) {
                 continue;
             }
-            if (top > rect.top) {
+            if (top >= rect.top) {
                 top = rect.top;
             }
             //Log.d(TAG, "top=" + top + " gotcha:" + platform);
@@ -308,9 +308,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 x -= dx;
                 dstRect.offset(-dx, 0);
             }
-
-            scrollPlayform();
-            scrollEnemy();
+            if(!onPlatform){
+                scrollPlayform();
+                scrollEnemy();
+            }
             break;
 
         case attack:
