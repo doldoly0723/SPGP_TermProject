@@ -39,6 +39,8 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private boolean hurtOn = false;
     private long attackStartTime;
     private boolean delayOn = false;
+    private boolean check = false;
+    private boolean onPlatform = false;
 
     public enum State{
         stay, running, jump, attack, falling, attackEffect, hurt, dead,
@@ -198,14 +200,23 @@ public class Player extends SheetSprite implements IBoxCollidable {
         switch (state){
         case jump:
         case falling:
+            onPlatform = false;
             float dy = jumpSpeed * elapsedSeconds;
             jumpSpeed += GRAVITY * elapsedSeconds;
             if(jumpSpeed >= 0){ // 낙하하고 있다면 발밑에 땅이 있는지 확인
                 float foot = collisionRect.bottom;
                 float floor = findNearestPlatformTop(foot);         // 여기 무한대가 들어올때 안그려짐
-                if(foot + dy >= floor){
+                if(foot + dy >= floor ){
                     dy = floor - foot ;
-                    setState(State.stay);
+                    if(dy < 0.2f){
+                        setState(State.stay);
+                        y += dy;
+
+                        dstRect.offset(0, dy);
+                        check = true;
+                        onPlatform = true;
+                    }
+
                 }
             }
             if(rightOn){
@@ -225,8 +236,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 maxDown = false;
             }
             else if(y + dy + dstRect.height() > Metrics.height +0.5){
+                /////////////////////////////////////////////////////// 여기가 문제인듯
+                //
                 dy = 0;
-                y -= dy;
                 maxDown = true;
                 maxUp = false;
             }
@@ -237,12 +249,20 @@ public class Player extends SheetSprite implements IBoxCollidable {
             // 만약 화면의 아래쪽에 닿으면 maxDown을 true
 
 
+            if(!check){
+                y += dy;
+                dstRect.offset(0, dy);
+            }
+            else{
+                check = false;
+            }
 
-            y += dy;
-            dstRect.offset(0, dy);
+            if(!onPlatform){
+                scrollPlayform();
+                scrollEnemy();
+            }
 
-            scrollPlayform();
-            scrollEnemy();
+
             break;
         case stay:
             float foot = collisionRect.bottom;
@@ -324,6 +344,59 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 x -= dx;
                 dstRect.offset(-dx,0);
             }
+            ///////////////////////////////////////////////////////////
+            dy = jumpSpeed * elapsedSeconds;
+            jumpSpeed += GRAVITY * elapsedSeconds;
+            if(jumpSpeed >= 0){ // 낙하하고 있다면 발밑에 땅이 있는지 확인
+                foot = collisionRect.bottom;
+                floor = findNearestPlatformTop(foot);         // 여기 무한대가 들어올때 안그려짐
+                if(foot + dy >= floor ){
+                    dy = floor - foot ;
+                    if(dy < 0.2f){
+                        //setState(State.stay);
+                        y += dy;
+
+                        dstRect.offset(0, dy);
+                        check = true;
+                        onPlatform = true;
+                    }
+
+                }
+            }
+            // 화면 상하 스크롤 되도록
+            // 만약 점프했을때 화면의 위쪽에 닿으면 maxUp을 true
+            if(y -dy < 0 + 0.3) {
+                maxUp= true;
+                maxDown = false;
+            }
+            else if(y + dy + dstRect.height() > Metrics.height +0.5){
+                /////////////////////////////////////////////////////// 여기가 문제인듯
+                //
+                dy = 0;
+                maxDown = true;
+                maxUp = false;
+            }
+            else{
+                maxUp = false;
+                maxDown = false;
+            }
+            // 만약 화면의 아래쪽에 닿으면 maxDown을 true
+
+
+            if(!check){
+                y += dy;
+                dstRect.offset(0, dy);
+            }
+            else{
+                check = false;
+            }
+
+            if(!onPlatform){
+                scrollPlayform();
+                scrollEnemy();
+            }
+
+
             break;
         }
         fixCollisionRect();
@@ -441,6 +514,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
         return this.maxDown;
     }
 
+    public boolean getonPlatform(){
+        return this.onPlatform;
+    }
 
     public RectF getCollisionRect(){
         return collisionRect;

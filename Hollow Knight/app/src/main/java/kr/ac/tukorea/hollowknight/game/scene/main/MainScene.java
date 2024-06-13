@@ -50,7 +50,7 @@ public class MainScene extends Scene {
         //add(Layer.bg, new ScrollBackground(R.mipmap.sameple,zoomArea));
 
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 14, 15));
-        //add(Layer.platform, Platform.get(Platform.Type.T_2x1, 8, 7));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 8, 7));
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 7));
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 5));
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 10, 3));

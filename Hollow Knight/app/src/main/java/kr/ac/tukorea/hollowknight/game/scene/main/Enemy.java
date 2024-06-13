@@ -18,7 +18,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
 
     private static final float MOVE_LIMIT = 5.0f;
     private final Player player;
-    private float startPosX = 20.0f;
+    private float startPosX = 25.0f;
     private float startPosY = 5.0f;
     private boolean maxRight;
     private boolean maxLeft;
