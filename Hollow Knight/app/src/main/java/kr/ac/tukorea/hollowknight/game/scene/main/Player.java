@@ -45,6 +45,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private boolean godMode = false;
     private float moveDistance = 0.0f;
     private static final float MOVE_LIMIT = 8.0f;
+    private boolean dashdelayOn = false;
+    private long dashdelayTime;
+    private long DASH_DURATION = 5000;
 
     public enum State{
         stay, running, jump, attack, falling, attackEffect, hurt, dead, dash,
@@ -486,8 +489,15 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
 
     public void dash(){
-        godMode = true;
-        setState(State.dash);
+        if(!dashdelayOn){
+            godMode = true;
+            setState(State.dash);
+            dashdelayTime = System.currentTimeMillis();
+            dashdelayOn = true;
+        }
+        if(System.currentTimeMillis() - dashdelayTime >= DASH_DURATION){
+            dashdelayOn = false;
+        }
     }
 
     public boolean getgodMode(){return godMode;}
