@@ -285,7 +285,7 @@ public class Boss extends SheetSprite implements IBoxCollidable {
             case roll:
                 break;
             case attackStart:
-                if(System.currentTimeMillis() - delayTime >= ATTACK_DURATION){
+                if(System.currentTimeMillis() - delayTime >= 2*ATTACK_DURATION){
                     setState(State.attack);
                     delayTime = System.currentTimeMillis();
                 }

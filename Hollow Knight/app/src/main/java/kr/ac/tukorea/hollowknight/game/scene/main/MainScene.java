@@ -37,28 +37,43 @@ public class MainScene extends Scene {
         player = new Player();
         add(Layer.player,player);
 
-        enemy = new Enemy(player, 120, 6);
+        enemy = new Enemy(player, 20, 6);
         add(Layer.enemy, enemy);
 
-//        Enemy enemy1 =new Enemy(player, 15, 6);
-//        add(Layer.enemy, enemy1);
-//
-//        Enemy enemy11 =new Enemy(player, 30, 15);
-//        add(Layer.enemy, enemy11);
-//
-//        Enemy enemy111 =new Enemy(player, 50, 15);
-//        add(Layer.enemy, enemy111);
+        Enemy enemy1 =new Enemy(player, 15, 6);
+        add(Layer.enemy, enemy1);
 
-        enemy2 = new Enemy2(player,130,5);
+        Enemy enemy11 =new Enemy(player, 30, 6);
+        add(Layer.enemy, enemy11);
+
+        Enemy enemy111 =new Enemy(player, 45, 6);
+        add(Layer.enemy, enemy111);
+
+        Enemy enemy1111 =new Enemy(player, 62, 6);
+        add(Layer.enemy, enemy1111);
+
+        enemy2 = new Enemy2(player,30,5);
         add(Layer.enemy2, enemy2);
 
         Enemy2 enemy22 = new Enemy2(player,0,5);
         add(Layer.enemy2, enemy22);
 
-        boss = new Boss(player, 25,3);      //60 4
+        Enemy2 enemy222 = new Enemy2(player,50,5);
+        add(Layer.enemy2, enemy222);
+
+        Enemy2 enemy2222 = new Enemy2(player,60,5);
+        add(Layer.enemy2, enemy2222);
+
+        boss = new Boss(player, 50,3);      //60 4
         add(Layer.boss, boss);
-
-
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 35, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 40, 3));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 45, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 50, 3));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 55, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 60, 3));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 65, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 70, 3));
 
         Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정
         //Rect zoomArea = new Rect(0, 300, 100, 478);
