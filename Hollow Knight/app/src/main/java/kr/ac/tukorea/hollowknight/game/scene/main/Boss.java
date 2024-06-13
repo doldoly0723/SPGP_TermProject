@@ -26,9 +26,12 @@ public class Boss extends SheetSprite implements IBoxCollidable {
     private Canvas canvas;
     private float moveDistance = 0.0f;
     private int hurtFrameCount;
-    private int hp = 10;
+    private int hp = 30;
     private int deadFrameCount;
     private boolean deadOn = false;
+    private long delayTime;
+    private long ATTACK_DURATION = 1000;
+    private int attackRecoverFrameCount;
 
     public enum State{
         stay, move, rollStart,roll ,attackStart,attack,attack2Start,attack2,attackRecover,  hurt, dead, falling,
@@ -54,16 +57,7 @@ public class Boss extends SheetSprite implements IBoxCollidable {
         }
         return rects;
     }
-    protected static Rect[] makemoveRects(int... indices){
-        Rect[] rects = new Rect[indices.length];
-        for(int i = 0; i < indices.length; i++){
-            int idx = indices[i];
-            int l = 3 + (idx % 100) * 125;
-            int t = 793;
-            rects[i] = new Rect(l,t,l+422, t+356);
-        }
-        return rects;
-    }
+
 
     protected static Rect[] makerollStartRects(int... indices){
         Rect[] rects = new Rect[indices.length];
@@ -141,13 +135,13 @@ public class Boss extends SheetSprite implements IBoxCollidable {
     protected static Rect[][]srcRectArray = {
             //stay  3 22 116 85
             makeidleRects(100, 101, 102, 103, 104, 105), //3 424 297 347 303
-            makemoveRects(200,201,202,203,204,205),            // 3 793 422 356 428
+            makeRects(3,793,422,356,428,200,201,202,203,204,205),            // move
             makerollStartRects(400,401,402,403,404),       // 3 1535 440 380 446
             makerollRects(500,501,502),            // 3 1937 390 353 396
-            makeattackStartRects(700,701,702,703,704),             // 3 2498 480 338 486
-            makeattackRects(900),      // 3 3199 594 298
+            makeRects(3 ,2498 ,480 ,338 ,486,700,701,702,703,704),             // attackStart
+            makeattackRects(900),      // 3 3199 594 298 attack
             makeattack2StartRects(1000,1001,1002,1003),        // 3 3518 535 358 542
-            makeattack2Rects(1100),     //3 3897 459 386
+            makeRects(3,3897,459,386,0,1100),     //attack2
             makeRects(497,3897,491,381,991,1100,1101,1102),     //497 3897 491 381 991   attackRecover
             makeRects(3, 4305, 435, 368, 441, 1200,1201,1202),    //3 4305 435 368 441 hurt
             makeRects(3, 4695,361,343,367,1300,1301,1302),        // dead
@@ -202,25 +196,6 @@ public class Boss extends SheetSprite implements IBoxCollidable {
             //Log.d(TAG, "top=" + top + " gotcha:" + platform);
         }
         return top;
-//        MainScene scene = (MainScene) Scene.top();
-//        if (scene == null)
-//            return Float.POSITIVE_INFINITY; // 발판이 없으면 무한대 반환
-//        ArrayList<IGameObject> platforms = scene.objectsAt(MainScene.Layer.platform);
-//        float top = Float.POSITIVE_INFINITY; // 초기값을 무한대로 설정
-//        for (IGameObject obj : platforms) {
-//            Platform platform = (Platform) obj;
-//            RectF rect = platform.getCollisionRect();
-//            if (rect.left > x || x > rect.right) {
-//                continue;
-//            }
-//            if (rect.top < foot) {
-//                continue;
-//            }
-//            if (top > rect.top) {
-//                top = rect.top;
-//            }
-//        }
-//        return top;
     }
     private void fixCollisionRect(){
         float[] insets = edgeInsetRatios[state.ordinal()];
@@ -245,28 +220,113 @@ public class Boss extends SheetSprite implements IBoxCollidable {
         //stay, move, rollStart,roll ,attackStart,attack,attack2Start,attack2,attackRecover,  hurt, dead, falling,
         switch (state){
             case stay:
+                float foot = collisionRect.bottom;
+                float floor = findNearestPlatformTop(foot);
+
+                if (foot < floor) {
+                    setState(Boss.State.falling);
+                    jumpSpeed = 0;
+                }
                 break;
             case move:
+                foot = collisionRect.bottom;
+                floor = findNearestPlatformTop(foot);
+                float dx = moveSpeed * elapsedSeconds;
+                if (foot < floor) {
+                    setState(Boss.State.falling);
+                    jumpSpeed = 0;
+                }
+                else {
+                    // 이동 로직
+                    if (!reverse) {
+                        x -= dx; // 왼쪽으로 1 픽셀 이동
+                        dstRect.offset(-dx, 0);
+                    } else {
+                        x += dx; // 오른쪽으로 1 픽셀 이동
+                        dstRect.offset(dx, 0);
+                    }
+                    moveDistance += dx; // 이동 거리 카운터 증가
+
+                    // 이동 한계 도달 시 방향 전환
+                    if (moveDistance >= MOVE_LIMIT) {
+                        reverse = !reverse;  // 방향 전환
+                        moveDistance = 0;  // 이동 거리 카운터 리셋
+                    }
+
+                    if(distanceX <= MOVE_LIMIT && distanceY <= MOVE_LIMIT){
+                        //state Attack로 할지 생각해보기
+                        setState(State.attackStart);
+                        delayTime = System.currentTimeMillis();
+                    }
+                }
                 break;
             case rollStart:
                 break;
             case roll:
                 break;
             case attackStart:
+                if(System.currentTimeMillis() - delayTime >= ATTACK_DURATION){
+                    setState(State.attack);
+                    delayTime = System.currentTimeMillis();
+                }
                 break;
             case attack:
+                if(reverse){
+                    edgeInsetRatios[5][0] =  0.0f; // State.attack right
+                    edgeInsetRatios[5][2] =  -0.5f; // State.attack left
+                }
+                else{
+                    edgeInsetRatios[5][2] =  0.0f; // State.attack left
+                    edgeInsetRatios[5][0] =  -0.5f; // State.attack right
+                }
+                if(System.currentTimeMillis() - delayTime >= ATTACK_DURATION){
+                    setState(State.attack2Start);
+                    delayTime = System.currentTimeMillis();
+                }
                 break;
             case attack2Start:
+                if(System.currentTimeMillis() - delayTime >= ATTACK_DURATION){
+                    setState(State.attack2);
+                    delayTime = System.currentTimeMillis();
+                }
                 break;
             case attack2:
+                if(reverse){
+                    edgeInsetRatios[7][0] =  0.0f; // State.attack right
+                    edgeInsetRatios[7][2] =  -0.5f; // State.attack left
+                }
+                else{
+                    edgeInsetRatios[7][2] =  0.0f; // State.attack left
+                    edgeInsetRatios[7][0] =  -0.5f; // State.attack right
+                }
+                if(System.currentTimeMillis() - delayTime >= ATTACK_DURATION){
+                    setState(State.attackRecover);
+                    attackRecoverFrameCount = srcRectArray[State.attackRecover.ordinal()].length;
+                }
                 break;
             case attackRecover:
+                attackframeCount--;
+                if(attackframeCount <=0){
+                    setState(State.move);
+                }
                 break;
             case hurt:
                 break;
             case dead:
                 break;
             case falling:
+                float dy = jumpSpeed * elapsedSeconds;
+                jumpSpeed += GRAVITY * elapsedSeconds;
+                if(jumpSpeed >= 0){ // 낙하하고 있다면 발밑에 땅이 있는지 확인
+                    foot = collisionRect.bottom;
+                    floor = findNearestPlatformTop(foot);
+                    if(foot + dy >= floor){
+                        dy = floor - foot;
+                        setState(Boss.State.move);
+                    }
+                }
+                y += dy;
+                dstRect.offset(0, dy);
                 break;
         }
         fixCollisionRect();

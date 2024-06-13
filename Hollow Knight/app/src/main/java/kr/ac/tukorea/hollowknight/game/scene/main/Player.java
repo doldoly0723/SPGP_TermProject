@@ -41,6 +41,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private boolean delayOn = false;
     private boolean check = false;
     private boolean onPlatform = false;
+    private Boss boss;
 
     public enum State{
         stay, running, jump, attack, falling, attackEffect, hurt, dead,
@@ -191,6 +192,21 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 enemy2.scrollUp();
             else if(maxDown)
                 enemy2.scrollDown();
+        }
+
+        ArrayList<IGameObject> boss = scene.objectsAt(MainScene.Layer.boss);
+        for(IGameObject obj : boss){
+            Boss bos = (Boss) obj;
+            if(maxLeft && leftOn){
+                bos.scrollLeft();
+            }
+            else if(maxRight && rightOn){
+                bos.scrollRight();
+            }
+            if(maxUp)
+                bos.scrollUp();
+            else if(maxDown)
+                bos.scrollDown();
         }
     }
 
@@ -444,6 +460,11 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
         }
     }
+
+    public void dash(){
+
+    }
+
     public void rightMove(boolean startright){
         if(state == State.stay && startright) {
 
@@ -480,6 +501,12 @@ public class Player extends SheetSprite implements IBoxCollidable {
         setState(State.hurt);
         fixCollisionRect();
         this.enemy2 = enemy2;
+    }
+    public void hurt(Boss boss){
+        if(state == State.hurt) return;
+        setState(State.hurt);
+        fixCollisionRect();
+        this.boss = boss;
     }
 
     public boolean getattackOn(){

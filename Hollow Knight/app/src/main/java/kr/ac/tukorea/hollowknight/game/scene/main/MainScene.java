@@ -23,13 +23,12 @@ public class MainScene extends Scene {
     private final ScrollBackground background;
 
     private static final String TAG = MainScene.class.getSimpleName();
-//    private final Enemy enemy;
-//    private final Enemy2 enemy2;
-//    private final Boss boss;
-    //private final Enemy1 enemy;
+    private final Enemy enemy;
+    private final Enemy2 enemy2;
+    private final Boss boss;
 
     public enum Layer{
-        bg,platform, enemy, enemy2,boss, player,ui, touch, controller, COUNT,
+        bg,platform, boss,enemy, enemy2, player,ui, touch, controller, COUNT,
     }
     public MainScene(){
         initLayers(Layer.COUNT);
@@ -38,14 +37,28 @@ public class MainScene extends Scene {
         player = new Player();
         add(Layer.player,player);
 
-//        enemy = new Enemy(player);
-//        add(Layer.enemy, enemy);
+        enemy = new Enemy(player, 120, 6);
+        add(Layer.enemy, enemy);
+
+//        Enemy enemy1 =new Enemy(player, 15, 6);
+//        add(Layer.enemy, enemy1);
 //
-//        enemy2 = new Enemy2(player);
-//        add(Layer.enemy2, enemy2);
+//        Enemy enemy11 =new Enemy(player, 30, 15);
+//        add(Layer.enemy, enemy11);
 //
-//        boss = new Boss(player);
-//        add(Layer.boss, boss);
+//        Enemy enemy111 =new Enemy(player, 50, 15);
+//        add(Layer.enemy, enemy111);
+
+        enemy2 = new Enemy2(player,130,5);
+        add(Layer.enemy2, enemy2);
+
+        Enemy2 enemy22 = new Enemy2(player,0,5);
+        add(Layer.enemy2, enemy22);
+
+        boss = new Boss(player, 15,3);      //60 4
+        add(Layer.boss, boss);
+
+
 
         Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정
         //Rect zoomArea = new Rect(0, 300, 100, 478);
@@ -54,18 +67,13 @@ public class MainScene extends Scene {
         //add(Layer.bg, new ScrollBackground(R.mipmap.sameple,zoomArea));
 
         // 시작 위치
-        //add(Layer.platform, Platform.get(Platform.Type.T_30x5, 0, 7));
+        add(Layer.platform, Platform.get(Platform.Type.T_30x5, 0, 7));
 
         // 위쪽
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 28, 5));
-        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 33, 3));
-        add(Layer.platform, Platform.get(Platform.Type.T_10x2, 39, 5));
-        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 38, 1));
-        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 44, 1));
-        add(Layer.platform, Platform.get(Platform.Type.T_10x2, 53, 4));
 
         // 가운데
-        add(Layer.platform, Platform.get(Platform.Type.T_10x2, 40, 7));
+        add(Layer.platform, Platform.get(Platform.Type.T_30x5, 35, 7));
 
         //아래쪽
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 34, 9));
@@ -124,6 +132,12 @@ public class MainScene extends Scene {
         add(Layer.touch, new Button(R.mipmap.controller_a, 18.0f, 7.5f, 1.0f, 1.0f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
                 player.attack();
+                return true;
+            }
+        }));
+        add(Layer.touch, new Button(R.mipmap.controller_b, 18.0f, 6f, 1.0f, 1.0f, new Button.Callback(){
+            public boolean onTouch(Button.Action action){
+                player.dash();
                 return true;
             }
         }));

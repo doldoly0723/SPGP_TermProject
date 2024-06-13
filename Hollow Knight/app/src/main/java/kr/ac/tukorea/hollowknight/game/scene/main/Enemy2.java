@@ -159,12 +159,12 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
             case move:
                 // 플레이어의 위치에 따라 이동
                 if (playerPosX > x) {
-                    float dx = moveSpeed * elapsedSeconds * 0.1f;
+                    float dx = moveSpeed * elapsedSeconds * 0.3f;
                     x += dx;
                     dstRect.offset(dx,0);
                     reverse = true;
                 } else {
-                    float dx = moveSpeed * elapsedSeconds * 0.1f;
+                    float dx = moveSpeed * elapsedSeconds * 0.3f;
                     x -= dx;
                     dstRect.offset(-dx,0);
                     reverse = false;
@@ -172,11 +172,11 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
 
                 // 플레이어가 위에 있으면 위로 이동, 아래에 있으면 아래로 이동
                 if (playerPosY > y) {
-                    float dy = moveSpeed * elapsedSeconds * 0.1f;
+                    float dy = moveSpeed * elapsedSeconds * 0.3f;
                     y += dy;
                     dstRect.offset(0, dy);
                 } else {
-                    float dy = moveSpeed * elapsedSeconds * 0.1f;
+                    float dy = moveSpeed * elapsedSeconds * 0.3f;
                     y -= dy;
                     dstRect.offset(0, -dy);
                 }

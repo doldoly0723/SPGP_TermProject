@@ -243,7 +243,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
             case hurt:
                 hurtFrameCount--;
                 if(hurtFrameCount == 0){
-                    setState(State.stay);
+                    setState(State.move);
                 }
                 break;
             case dead:

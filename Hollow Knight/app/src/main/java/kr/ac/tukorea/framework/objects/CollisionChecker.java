@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import kr.ac.tukorea.framework.interfaces.IGameObject;
 import kr.ac.tukorea.framework.util.CollisionHelper;
+import kr.ac.tukorea.hollowknight.game.scene.main.Boss;
 import kr.ac.tukorea.hollowknight.game.scene.main.Enemy;
 import kr.ac.tukorea.hollowknight.game.scene.main.Enemy2;
 import kr.ac.tukorea.hollowknight.game.scene.main.MainScene;
@@ -24,6 +25,7 @@ public class CollisionChecker implements IGameObject {
         // enemy와 충돌 체크
         checkEnemy();
         checkEnemy2();
+        checkBoss();
     }
 
     public void checkEnemy(){
@@ -59,6 +61,24 @@ public class CollisionChecker implements IGameObject {
             }
             if(enemy2.getdeadOn()){
                 scene.remove(MainScene.Layer.enemy2, enemy2);
+            }
+        }
+    }
+
+    public void checkBoss(){
+        ArrayList<IGameObject> boss = scene.objectsAt(MainScene.Layer.boss);
+        for(int i = boss.size() - 1; i >=0;i--){
+            Boss bos = (Boss) boss.get(i);
+            if(CollisionHelper.collides(player, bos)){
+                if(!player.getattackOn()){
+                    player.hurt(bos);
+                }
+                else if(player.getattackOn()){
+                    bos.hurt();
+                }
+            }
+            if(bos.getdeadOn()){
+                scene.remove(MainScene.Layer.enemy2, bos);
             }
         }
     }
