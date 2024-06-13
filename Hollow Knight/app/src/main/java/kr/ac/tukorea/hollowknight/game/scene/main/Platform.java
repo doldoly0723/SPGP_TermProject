@@ -9,7 +9,7 @@ import kr.ac.tukorea.hollowknight.R;
 
 public class Platform extends MapObject {
     public enum Type{
-        T_2x1, T_3x1, T_5x2;
+        T_2x1, T_3x1, T_5x2, T_30x5, T_10x2;
         int resId() {return resIds[this.ordinal()];}
         int width() {return widths[this.ordinal()];}
         int height() {return heights[this.ordinal()];}
@@ -17,9 +17,11 @@ public class Platform extends MapObject {
                 R.mipmap.platform_93x59,
                 R.mipmap.platform_120x66,
                 R.mipmap.platform_341x68,
+                R.mipmap.platform400x10,
+                R.mipmap.platform400x10,
         };
-        static int[] widths = {2,3,5};
-        static int[] heights = {1,1,2};
+        static int[] widths = {2,3,5,30, 10};
+        static int[] heights = {1,1,2,5, 2};
     }
 
     protected MainScene.Layer getLayer() {

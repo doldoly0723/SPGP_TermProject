@@ -40,7 +40,7 @@ public class Boss extends SheetSprite implements IBoxCollidable {
     private static final float GRAVITY = 17.0f;
     private final RectF collisionRect = new RectF();
 
-    protected State state = State.hurt;
+    protected State state = State.stay;
 
     //private boolean reverse = false;
 
@@ -170,11 +170,13 @@ public class Boss extends SheetSprite implements IBoxCollidable {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
     };
 
-    public Boss(Player player)  {
+    public Boss(Player player, float startPosX, float startPosY)  {
         super(R.mipmap.boss,8);
         this.player = player;
+        this.startPosX = startPosX;
+        this.startPosY = startPosY;
         reverse = false;                // 처음에는 항상 오른쪽을 보고 시작
-        setPosition(startPosX,startPosY, 1.8f, 2.0f);
+        setPosition(startPosX,startPosY, 5.4f, 6.0f);
         srcRects = srcRectArray[state.ordinal()];
         fixCollisionRect();
     }

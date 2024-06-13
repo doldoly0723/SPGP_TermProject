@@ -96,9 +96,11 @@ public class Enemy2 extends SheetSprite implements IBoxCollidable {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.dead
     };
 
-    public Enemy2(Player player)  {
+    public Enemy2(Player player, float startPosX, float startPosY)  {
         super(R.mipmap.aspid,8);
         this.player = player;
+        this.startPosX = startPosX;
+        this.startPosY = startPosY;
         reverse = false;                // 처음에는 항상 오른쪽을 보고 시작
         setPosition(startPosX,startPosY, 1.8f, 2.0f);
         srcRects = srcRectArray[state.ordinal()];
