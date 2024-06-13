@@ -62,7 +62,7 @@ public class MainScene extends Scene {
         add(Layer.platform, Platform.get(Platform.Type.T_10x2, 39, 5));
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 38, 1));
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 44, 1));
-        add(Layer.platform, Platform.get(Platform.Type.T_10x2, 53, 3));
+        add(Layer.platform, Platform.get(Platform.Type.T_10x2, 53, 4));
 
         // 가운데
         add(Layer.platform, Platform.get(Platform.Type.T_10x2, 40, 7));
@@ -93,6 +93,7 @@ public class MainScene extends Scene {
 
         // 보스 위치
         add(Layer.platform, Platform.get(Platform.Type.T_30x5, 50, 7));
+        add(Layer.platform, Platform.get(Platform.Type.T_30x5, 80, 7));
 
 
         add(Layer.controller, new CollisionChecker(this,player));
