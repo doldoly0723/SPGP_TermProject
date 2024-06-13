@@ -33,7 +33,7 @@ public class CollisionChecker implements IGameObject {
         for(int i = enemies.size() - 1; i >=0;i--){
             Enemy enemy = (Enemy) enemies.get(i);
             if(CollisionHelper.collides(player, enemy)){
-                if(!player.getattackOn()){
+                if(!player.getattackOn() && !player.getgodMode()){
                     player.hurt(enemy);
                 }
                 else if(player.getattackOn()){
@@ -52,7 +52,7 @@ public class CollisionChecker implements IGameObject {
         for(int i = enemies2.size() - 1; i >=0;i--){
             Enemy2 enemy2 = (Enemy2) enemies2.get(i);
             if(CollisionHelper.collides(player, enemy2)){
-                if(!player.getattackOn()){
+                if(!player.getattackOn()&& !player.getgodMode()){
                     player.hurt(enemy2);
                 }
                 else if(player.getattackOn()){
@@ -70,7 +70,7 @@ public class CollisionChecker implements IGameObject {
         for(int i = boss.size() - 1; i >=0;i--){
             Boss bos = (Boss) boss.get(i);
             if(CollisionHelper.collides(player, bos)){
-                if(!player.getattackOn()){
+                if(!player.getattackOn()&& !player.getgodMode()){
                     player.hurt(bos);
                 }
                 else if(player.getattackOn()){

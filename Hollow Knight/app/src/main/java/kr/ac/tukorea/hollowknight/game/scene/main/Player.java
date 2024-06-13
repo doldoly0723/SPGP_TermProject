@@ -42,9 +42,12 @@ public class Player extends SheetSprite implements IBoxCollidable {
     private boolean check = false;
     private boolean onPlatform = false;
     private Boss boss;
+    private boolean godMode = false;
+    private float moveDistance = 0.0f;
+    private static final float MOVE_LIMIT = 8.0f;
 
     public enum State{
-        stay, running, jump, attack, falling, attackEffect, hurt, dead,
+        stay, running, jump, attack, falling, attackEffect, hurt, dead, dash,
     }
 
     private float jumpSpeed;
@@ -86,7 +89,9 @@ public class Player extends SheetSprite implements IBoxCollidable {
             // hurt
             makeRects(200,201,202,203),
             //dead
-            makeRects(9)
+            makeRects(9),
+            //dash
+            makeRects(1000,1001,1002,1003,1004),
     };
     protected static float[][] edgeInsetRatios = {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
@@ -97,6 +102,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
             {0.0f, 0.0f, 0.0f, 0.0f},   // attack effect
             {0.0f, 0.0f, 0.0f, 0.0f},   // hurt
             {0.0f, 0.0f, 0.0f, 0.0f},   // dead
+            {0.0f, 0.0f, 0.0f, 0.0f},   // dash
     };
 
     public Player()  {
@@ -419,6 +425,24 @@ public class Player extends SheetSprite implements IBoxCollidable {
 
 
             break;
+        case dash:
+            float dvx = moveSpeed * elapsedSeconds * 2;
+            if (reverse) {
+                x -= dvx; // 왼쪽으로 1 픽셀 이동
+                dstRect.offset(-dvx, 0);
+            } else {
+                x += dvx; // 오른쪽으로 1 픽셀 이동
+                dstRect.offset(dvx, 0);
+            }
+            moveDistance += dvx; // 이동 거리 카운터 증가
+
+            if (moveDistance >= MOVE_LIMIT) {
+                setState(State.stay);
+                godMode = false;
+                moveDistance = 0;  // 이동 거리 카운터 리셋
+            }
+
+            break;
         }
         fixCollisionRect();
     }
@@ -462,8 +486,11 @@ public class Player extends SheetSprite implements IBoxCollidable {
     }
 
     public void dash(){
-
+        godMode = true;
+        setState(State.dash);
     }
+
+    public boolean getgodMode(){return godMode;}
 
     public void rightMove(boolean startright){
         if(state == State.stay && startright) {
