@@ -218,7 +218,7 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
                     }
 
                     if(distanceX <= MOVE_LIMIT && distanceY <= MOVE_LIMIT){
-                        //state Attack로 할짖 생각해보기
+                        //state Attack로 할지 생각해보기
                         setState(State.attack);
                     }
                 }

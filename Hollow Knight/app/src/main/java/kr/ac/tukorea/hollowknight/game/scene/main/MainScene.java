@@ -25,10 +25,11 @@ public class MainScene extends Scene {
     private static final String TAG = MainScene.class.getSimpleName();
     private final Enemy enemy;
     private final Enemy2 enemy2;
+    private final Boss boss;
     //private final Enemy1 enemy;
 
     public enum Layer{
-        bg,platform, enemy, enemy2,player,ui, touch, controller, COUNT,
+        bg,platform, enemy, enemy2,boss, player,ui, touch, controller, COUNT,
     }
     public MainScene(){
         initLayers(Layer.COUNT);
@@ -42,6 +43,9 @@ public class MainScene extends Scene {
 
         enemy2 = new Enemy2(player);
         add(Layer.enemy2, enemy2);
+
+        boss = new Boss(player);
+        add(Layer.boss, boss);
 
         Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정
         //Rect zoomArea = new Rect(0, 300, 100, 478);
