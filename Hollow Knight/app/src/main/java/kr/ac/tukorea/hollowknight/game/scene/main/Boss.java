@@ -26,15 +26,16 @@ public class Boss extends SheetSprite implements IBoxCollidable {
     private Canvas canvas;
     private float moveDistance = 0.0f;
     private int hurtFrameCount;
-    private int hp = 30;
+    private int hp = 60;
     private int deadFrameCount;
     private boolean deadOn = false;
     private long delayTime;
     private long ATTACK_DURATION = 1000;
     private int attackRecoverFrameCount;
+    private long hurtStartTime;
 
     public enum State{
-        stay, move, rollStart,roll ,attackStart,attack,attack2Start,attack2,attackRecover,  hurt, dead, falling,
+        stay, move, rollStart,roll ,attackStart,attack,attack2Start,attack2,attackRecover,  hurt, dead, falling, toplayer,
     }
 
     private float jumpSpeed;
@@ -146,6 +147,7 @@ public class Boss extends SheetSprite implements IBoxCollidable {
             makeRects(3, 4305, 435, 368, 441, 1200,1201,1202),    //3 4305 435 368 441 hurt
             makeRects(3, 4695,361,343,367,1300,1301,1302),        // dead
             makeRects(3, 4305, 435, 368, 441, 1200,1201,1202),      //falling
+            makeRects(3,793,422,356,428,200,201,202,203,204,205),            // toplayer
     };
 
 
@@ -162,6 +164,8 @@ public class Boss extends SheetSprite implements IBoxCollidable {
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.hurt
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.dead
             { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
+            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.toplayer
+
     };
 
     public Boss(Player player, float startPosX, float startPosY)  {
@@ -248,16 +252,32 @@ public class Boss extends SheetSprite implements IBoxCollidable {
                     moveDistance += dx; // 이동 거리 카운터 증가
 
                     // 이동 한계 도달 시 방향 전환
-                    if (moveDistance >= MOVE_LIMIT) {
+                    if (moveDistance >= 10) {
                         reverse = !reverse;  // 방향 전환
                         moveDistance = 0;  // 이동 거리 카운터 리셋
                     }
-
-                    if(distanceX <= MOVE_LIMIT && distanceY <= MOVE_LIMIT){
-                        //state Attack로 할지 생각해보기
-                        setState(State.attackStart);
-                        delayTime = System.currentTimeMillis();
+                    if(distanceX <= 8 && distanceY <= 8){
+                        setState(State.toplayer);
                     }
+
+                }
+                break;
+            case toplayer:
+                if (playerPosX > x) {
+                    float dvx = moveSpeed * elapsedSeconds;
+                    x += dvx;
+                    dstRect.offset(dvx,0);
+                    reverse = true;
+                } else {
+                    float dvx = moveSpeed * elapsedSeconds;
+                    x -= dvx;
+                    dstRect.offset(-dvx,0);
+                    reverse = false;
+                }
+                if(distanceX <= MOVE_LIMIT && distanceY <= MOVE_LIMIT){
+                    //state Attack로 할지 생각해보기
+                    setState(State.attackStart);
+                    delayTime = System.currentTimeMillis();
                 }
                 break;
             case rollStart:
@@ -268,6 +288,11 @@ public class Boss extends SheetSprite implements IBoxCollidable {
                 if(System.currentTimeMillis() - delayTime >= ATTACK_DURATION){
                     setState(State.attack);
                     delayTime = System.currentTimeMillis();
+                }
+                if (playerPosX > x){
+                    reverse = true;
+                }else{
+                    reverse = false;
                 }
                 break;
             case attack:
@@ -288,6 +313,11 @@ public class Boss extends SheetSprite implements IBoxCollidable {
                 if(System.currentTimeMillis() - delayTime >= ATTACK_DURATION){
                     setState(State.attack2);
                     delayTime = System.currentTimeMillis();
+                }
+                if (playerPosX > x){
+                    reverse = true;
+                }else{
+                    reverse = false;
                 }
                 break;
             case attack2:
@@ -311,6 +341,8 @@ public class Boss extends SheetSprite implements IBoxCollidable {
                 }
                 break;
             case hurt:
+                if(System.currentTimeMillis() - hurtStartTime >= 3000)
+                    setState(State.move);
                 break;
             case dead:
                 break;
@@ -338,9 +370,9 @@ public class Boss extends SheetSprite implements IBoxCollidable {
             setState(Boss.State.dead);
             deadFrameCount =srcRectArray[Boss.State.dead.ordinal()].length;
         }
-        else{
+        else if(hp%20 == 0){
             setState(Boss.State.hurt);
-            hurtFrameCount = srcRectArray[Boss.State.hurt.ordinal()].length;
+            hurtStartTime = System.currentTimeMillis();
         }
     }
 

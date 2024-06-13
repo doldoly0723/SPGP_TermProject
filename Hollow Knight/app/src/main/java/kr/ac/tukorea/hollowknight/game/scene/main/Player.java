@@ -374,6 +374,7 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 x -= dx;
                 dstRect.offset(-dx,0);
             }
+
             ///////////////////////////////////////////////////////////
             dy = jumpSpeed * elapsedSeconds;
             jumpSpeed += GRAVITY * elapsedSeconds;
@@ -425,6 +426,10 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 scrollPlayform();
                 scrollEnemy();
             }
+            else if(maxRight || maxLeft){
+                scrollPlayform();
+                scrollEnemy();
+            }
 
 
             break;
@@ -444,7 +449,14 @@ public class Player extends SheetSprite implements IBoxCollidable {
                 godMode = false;
                 moveDistance = 0;  // 이동 거리 카운터 리셋
             }
-
+            if(!onPlatform){
+                scrollPlayform();
+                scrollEnemy();
+            }
+            else if(maxRight || maxLeft){
+                scrollPlayform();
+                scrollEnemy();
+            }
             break;
         }
         fixCollisionRect();

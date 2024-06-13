@@ -55,7 +55,7 @@ public class MainScene extends Scene {
         Enemy2 enemy22 = new Enemy2(player,0,5);
         add(Layer.enemy2, enemy22);
 
-        boss = new Boss(player, 15,3);      //60 4
+        boss = new Boss(player, 25,3);      //60 4
         add(Layer.boss, boss);
 
 
