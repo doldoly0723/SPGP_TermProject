@@ -37,43 +37,51 @@ public class MainScene extends Scene {
         player = new Player();
         add(Layer.player,player);
 
-        enemy = new Enemy(player, 20, 6);
+        enemy = new Enemy(player, 24, 1);
         add(Layer.enemy, enemy);
+        add(Layer.platform, Platform.get(Platform.Type.T_10x2, 18, 4));
 
-        Enemy enemy1 =new Enemy(player, 15, 6);
+        Enemy enemy1 =new Enemy(player, 25, 4);
         add(Layer.enemy, enemy1);
 
-        Enemy enemy11 =new Enemy(player, 30, 6);
-        add(Layer.enemy, enemy11);
+//        Enemy enemy11 =new Enemy(player, 30, 6);
+//        add(Layer.enemy, enemy11);
 
-        Enemy enemy111 =new Enemy(player, 45, 6);
-        add(Layer.enemy, enemy111);
+//        Enemy enemy111 =new Enemy(player, 45, 6);
+//        add(Layer.enemy, enemy111);
+//
+//        Enemy enemy1111 =new Enemy(player, 90, 3);
+//        add(Layer.enemy, enemy1111);
 
-        Enemy enemy1111 =new Enemy(player, 62, 6);
-        add(Layer.enemy, enemy1111);
-
-        enemy2 = new Enemy2(player,30,5);
+        enemy2 = new Enemy2(player,30,4);
         add(Layer.enemy2, enemy2);
 
-        Enemy2 enemy22 = new Enemy2(player,0,5);
+        Enemy2 enemy22 = new Enemy2(player,3,5);
         add(Layer.enemy2, enemy22);
 
-        Enemy2 enemy222 = new Enemy2(player,50,5);
-        add(Layer.enemy2, enemy222);
+//        Enemy2 enemy222 = new Enemy2(player,50,5);
+//        add(Layer.enemy2, enemy222);
+//
+//        Enemy2 enemy2222 = new Enemy2(player,90,5);
+//        add(Layer.enemy2, enemy2222);
 
-        Enemy2 enemy2222 = new Enemy2(player,60,5);
-        add(Layer.enemy2, enemy2222);
-
-        boss = new Boss(player, 50,3);      //60 4
+        boss = new Boss(player, 80,3);      //60 4
         add(Layer.boss, boss);
-        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 35, 5));
-        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 40, 3));
-        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 45, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 35, 4));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 37, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 40, 3));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 43, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 45, 4));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 47, 5));
         add(Layer.platform, Platform.get(Platform.Type.T_3x1, 50, 3));
-        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 55, 5));
-        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 60, 3));
-        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 65, 5));
-        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 70, 3));
+        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 53, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 55, 4));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 57, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 60, 3));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 63, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_2x1, 65, 4));
+        add(Layer.platform, Platform.get(Platform.Type.T_3x1, 67, 5));
+        add(Layer.platform, Platform.get(Platform.Type.T_5x2, 70, 3));
 
         Rect zoomArea = new Rect(0, Max_Height/4, Max_Width/4, Max_Height); // 비트맵에서 확대할 영역 지정
         //Rect zoomArea = new Rect(0, 300, 100, 478);
@@ -89,6 +97,8 @@ public class MainScene extends Scene {
 
         // 가운데
         add(Layer.platform, Platform.get(Platform.Type.T_30x5, 35, 7));
+        add(Layer.platform, Platform.get(Platform.Type.T_30x5, 65, 7));
+
 
         //아래쪽
         add(Layer.platform, Platform.get(Platform.Type.T_5x2, 34, 9));

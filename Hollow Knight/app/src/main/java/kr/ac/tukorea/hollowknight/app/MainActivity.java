@@ -16,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(BuildConfig.DEBUG){
-            startActivity(new Intent(this, HollowKnightActivity.class));
-        }
+//        if(BuildConfig.DEBUG){
+//            startActivity(new Intent(this, HollowKnightActivity.class));
+//        }
     }
 
     public void onBtnStartGame(View view){

@@ -226,6 +226,12 @@ public class Enemy extends SheetSprite implements IBoxCollidable {
                 }
                 break;
             case attack:
+                foot = collisionRect.bottom;
+                floor = findNearestPlatformTop(foot);
+                if (foot < floor) {
+                    setState(Enemy.State.falling);
+                    jumpSpeed = 0;
+                }
                 if (playerPosX > x) {
                     float dvx = moveSpeed * elapsedSeconds * 0.3f;
                     x += dvx;

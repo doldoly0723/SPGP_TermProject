@@ -152,19 +152,19 @@ public class Boss extends SheetSprite implements IBoxCollidable {
 
 
     protected static float[][] edgeInsetRatios = {
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.stay
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.move
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.rollStart
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.roll
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attackStart
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attack
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attack2Start
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attack2
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.attackRecover
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.hurt
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.dead
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.falling
-            { 0.1f, 0.0f, 0.1f, 0.0f }, // State.toplayer
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.stay
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.move
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.rollStart
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.roll
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.attackStart
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.attack
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.attack2Start
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.attack2
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.attackRecover
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.hurt
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.dead
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.falling
+            { 0.3f, 0.0f, 0.3f, 0.0f }, // State.toplayer
 
     };
 
@@ -278,6 +278,11 @@ public class Boss extends SheetSprite implements IBoxCollidable {
                     //state Attack로 할지 생각해보기
                     setState(State.attackStart);
                     delayTime = System.currentTimeMillis();
+                    if (playerPosX > x){
+                        reverse = true;
+                    }else{
+                        reverse = false;
+                    }
                 }
                 break;
             case rollStart:
@@ -289,24 +294,25 @@ public class Boss extends SheetSprite implements IBoxCollidable {
                     setState(State.attack);
                     delayTime = System.currentTimeMillis();
                 }
-                if (playerPosX > x){
-                    reverse = true;
-                }else{
-                    reverse = false;
-                }
+
                 break;
             case attack:
                 if(reverse){
-                    edgeInsetRatios[5][0] =  0.0f; // State.attack right
-                    edgeInsetRatios[5][2] =  -0.5f; // State.attack left
+                    edgeInsetRatios[5][0] =  0.3f; // State.attack right
+                    edgeInsetRatios[5][2] =  -0.3f; // State.attack left
                 }
                 else{
-                    edgeInsetRatios[5][2] =  0.0f; // State.attack left
-                    edgeInsetRatios[5][0] =  -0.5f; // State.attack right
+                    edgeInsetRatios[5][2] =  0.3f; // State.attack left
+                    edgeInsetRatios[5][0] =  -0.3f; // State.attack right
                 }
                 if(System.currentTimeMillis() - delayTime >= ATTACK_DURATION){
                     setState(State.attack2Start);
                     delayTime = System.currentTimeMillis();
+                    if (playerPosX > x){
+                        reverse = true;
+                    }else{
+                        reverse = false;
+                    }
                 }
                 break;
             case attack2Start:
@@ -314,20 +320,16 @@ public class Boss extends SheetSprite implements IBoxCollidable {
                     setState(State.attack2);
                     delayTime = System.currentTimeMillis();
                 }
-                if (playerPosX > x){
-                    reverse = true;
-                }else{
-                    reverse = false;
-                }
+
                 break;
             case attack2:
                 if(reverse){
-                    edgeInsetRatios[7][0] =  0.0f; // State.attack right
-                    edgeInsetRatios[7][2] =  -0.5f; // State.attack left
+                    edgeInsetRatios[7][0] =  0.3f; // State.attack right
+                    edgeInsetRatios[7][2] =  -0.3f; // State.attack left
                 }
                 else{
-                    edgeInsetRatios[7][2] =  0.0f; // State.attack left
-                    edgeInsetRatios[7][0] =  -0.5f; // State.attack right
+                    edgeInsetRatios[7][2] =  0.3f; // State.attack left
+                    edgeInsetRatios[7][0] =  -0.3f; // State.attack right
                 }
                 if(System.currentTimeMillis() - delayTime >= ATTACK_DURATION){
                     setState(State.attackRecover);
@@ -345,6 +347,10 @@ public class Boss extends SheetSprite implements IBoxCollidable {
                     setState(State.move);
                 break;
             case dead:
+                deadFrameCount--;
+                if(deadFrameCount == 0){
+                    deadOn = true;
+                }
                 break;
             case falling:
                 float dy = jumpSpeed * elapsedSeconds;

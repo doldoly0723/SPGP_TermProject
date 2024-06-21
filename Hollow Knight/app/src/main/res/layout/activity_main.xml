@@ -12,21 +12,21 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:padding="100dp"
+        android:padding="50dp"
         android:gravity="center"
         >
-    <ImageView
-        android:layout_width="300dp"
-        android:layout_height="155dp"
-        android:layout_centerHorizontal="true"
-        android:background="@mipmap/vheart_title"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start"
-        android:background="@android:color/transparent"
-        android:onClick="OnBtnStartGame"
-        />
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="155dp"
+            android:layout_centerHorizontal="true"
+            android:background="@mipmap/vheart_title" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="114dp"
+            android:onClick="onBtnStartGame"
+            android:text="Start Game" />
 
 
     </LinearLayout>

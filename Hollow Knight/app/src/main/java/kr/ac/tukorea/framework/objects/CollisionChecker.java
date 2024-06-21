@@ -78,7 +78,7 @@ public class CollisionChecker implements IGameObject {
                 }
             }
             if(bos.getdeadOn()){
-                scene.remove(MainScene.Layer.enemy2, bos);
+                scene.remove(MainScene.Layer.boss, bos);
             }
         }
     }
